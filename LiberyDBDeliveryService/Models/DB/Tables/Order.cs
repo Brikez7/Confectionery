@@ -3,14 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace LibraryDatabaseCoffe.Models.DB.Tables
 {
+    public enum StatusOrder 
+    {
+        error = -1,
+        expectation = 0,
+        success = 1,
+    }
     public class Order
     {
-        private DateTime Now;
-
         public int? OrderId { get; set; }
         public int UserId { get; set; }
         public DateTime DateOrder { get; set; }
         public long Total { get; set; } = 0;
+        public StatusOrder StatusOrder { get; set; } = StatusOrder.error;
         public Order(int userId, DateTime dateORder, long total)
         {
             UserId = userId;

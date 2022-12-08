@@ -32,7 +32,6 @@ namespace Confectionery.Controllers
         [HttpPost]
         public async Task<IActionResult> ProductAdd(DescriptionViewModel descriptionView) 
         {
-        // Говно необходимо переделать
             if (User.Identity is not null && User.Identity.IsAuthenticated)
             {
                 DescriptionOrderRepository orderRepository = HttpContext.RequestServices.GetService<DescriptionOrderRepository>() ?? throw new Exception("Exception DescriptionOrderRepository Repository");

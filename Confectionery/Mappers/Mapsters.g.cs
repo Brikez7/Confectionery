@@ -36,7 +36,7 @@ namespace Confectionery.Mapers
         }
         public BascetViewModel Map(DescriptionOrder x)
         {
-            return new BascetViewModel(x.AmountSweetStaff, x.SweetStaff.StaffName, x.SweetStaff.Weight, x.SweetStaff.Price, x.SweetStaff.Calories);
+            return new BascetViewModel((int)x.DescriptionId, x.AmountSweetStaff, x.SweetStaff.StaffName, x.SweetStaff.Weight, x.SweetStaff.Price, x.SweetStaff.Calories, x.StaffId);
         }
         public IEnumerable<BascetViewModel> Map(IEnumerable<DescriptionOrder> p3)
         {
@@ -50,7 +50,7 @@ namespace Confectionery.Mapers
         
         private BascetViewModel funcMain2(DescriptionOrder p4)
         {
-            return new BascetViewModel(p4.AmountSweetStaff, p4.SweetStaff.StaffName, p4.SweetStaff.Weight, p4.SweetStaff.Price, p4.SweetStaff.Calories);
+            return new BascetViewModel((int)p4.DescriptionId, p4.AmountSweetStaff, p4.SweetStaff.StaffName, p4.SweetStaff.Weight, p4.SweetStaff.Price, p4.SweetStaff.Calories, p4.StaffId);
         }
     }
 }

@@ -3,8 +3,8 @@
 
 <form id="FInfoProduct" class="text-center">
     <div class="row m-0 p-0">
-        <div class="col-md-6 jumbotron vertical-center px-0">
-            <div class="container px-0">
+        <div class="col-md-6 jumbotron vertical-center px-0 d-md-flex pe-3">
+            <div class="container px-0 m-md-auto">
                 <img src="https://avatars.mds.yandex.net/i?id=d0d7d19e39a3c782c1adde3ec4e3a30160ea1945-5097070-images-thumbs&n=13" alt="Kodak Brownie Flash B Camera" class="image-responsive"/>
             </div>
         </div>
@@ -29,10 +29,10 @@
             <div class="col-md-12 p-0 mt-1">
                 <div>Цена: @Model.Staff.Price рб</div>
             </div>
-            <div class="col-12 col-md-6 p-0 mt-1">
+            <div class="col-12 col-md-6 p-0 mt-1 mb-2">
                 <h1 id="PriceProduct" class="product-price text-center">Общая стоимость 0 рб</h1>
             </div>
-            <div class="col-12 col-md-6 row p-0 m-0 d-md-flex">
+            <div class="col-12 col-md-6 row p-0 m-0 d-md-flex ps-2">
                 <div class="col-3 p-md-0 m-md-auto">
                     <label onclick="Increment(@(Model.Staff.Price.ToString().Replace(',','.')));" class="btn text-center py-3 px-4 m-0 w-100 px-md-3 btn-outline-success">+</label>
                 </div>
@@ -46,8 +46,8 @@
             </div>
         </div>
             <div class="col-md-12 px-0 text-center">
-                <input type ="hidden" asp-for="Id" value="@Model.Staff.StaffId"/>
-                <button id="ButtonAdd" class="text-center btn px-5 w-50 mt-5 btn-outline-primary">
+                <input type = "hidden" asp-for="Id" value="@Model.Staff.StaffId"/>
+                <button id="ButtonAdd" class="text-center btn px-5 w-50 h-75 mt-5 btn-outline-primary">
                     Add
                 </button>
 
@@ -70,18 +70,14 @@
             data: data,
             success: function(){
                 Swal.fire({
-                icon: 'success',,
-                title: 'Oops...',
-                text: 'Something went wrong!',
-                footer: '<a href="">Why do I have this issue?</a>'
+                icon: 'success',
+                title: 'Success add product',
                 })
             },
-            error :success: function(){
+            error : function(){
                 Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong!',
-                footer: '<a href="">Why do I have this issue?</a>'
+                title: 'Error add product',
                 }) 
             }
         });

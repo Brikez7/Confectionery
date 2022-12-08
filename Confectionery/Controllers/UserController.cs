@@ -96,12 +96,53 @@ namespace Confectionery.Controllers
                 DescriptionOrderRepository descriptionOrderRepository = HttpContext.RequestServices.GetService<DescriptionOrderRepository>() ?? throw new Exception("UserRepository is null");
                 Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
 
-                var descriptionOrders= await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
+                var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
                 IEnumerable<BascetViewModel> bascetView = mapster.Map(descriptionOrders);
 
                 return View(bascetView.ToList());
             }
             else 
+            {
+                return View();
+            }
+        }
+        [Route("{id:int}")]
+        public async Task<IActionResult> Bascet(int id) 
+        {
+            if (User.Identity is not null && User.Identity.IsAuthenticated)
+            {
+                DescriptionOrderRepository descriptionOrderRepository = HttpContext.RequestServices.GetService<DescriptionOrderRepository>() ?? throw new Exception("UserRepository is null");
+                Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
+
+                await descriptionOrderRepository.DeleteAsync(id);
+
+                var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
+                IEnumerable<BascetViewModel> bascetView = mapster.Map(descriptionOrders);
+
+                return View(bascetView.ToList());
+            }
+            else
+            {
+                return View();
+            }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Order() 
+        {
+            if (User.Identity is not null && User.Identity.IsAuthenticated)
+            {
+                OrderRepository orderRepository = HttpContext.RequestServices.GetService<OrderRepository>() ?? throw new Exception("UserRepository is null");
+                DescriptionOrderRepository descriptionOrderRepository = HttpContext.RequestServices.GetService<DescriptionOrderRepository>() ?? throw new Exception("UserRepository is null");
+                Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
+
+                await orderRepository.AddAsync(Convert.ToInt32(User.Claims.First().Value));
+
+                var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
+                IEnumerable<BascetViewModel> bascetView = mapster.Map(descriptionOrders);
+
+                return View(bascetView.ToList());
+            }
+            else
             {
                 return View();
             }

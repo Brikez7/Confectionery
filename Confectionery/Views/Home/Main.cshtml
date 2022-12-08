@@ -93,19 +93,19 @@
 </div>
 
 <div class="pt-5 container-fluid">
-    <div class="my-4 px-3 h2 text-center text-md-start">Сладости</div>
+    <div class="my-4 px-4 h2 text-center text-md-start row-cols-md-12 my-sm-5">Сладости</div>
     <div>
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             @foreach (var item in Model){
             <div class="px-1-sm" method="post">
-                <div class="card shadow-sm  mx-4 my-sm-3">
+                <div class="card shadow-sm mx-4 my-sm-3">
                     <img src="https://avatars.mds.yandex.net/i?id=1b2d704a6659481cd6a6f2f850be3d326323d45f-6946731-images-thumbs&n=13" class="w-100"  alt="...">
                     <div class="card-body">
                         <ng-view class="card-text">Название: @item.StaffName</ng-view>
                         <p  class="card-text">Классификация: @item.Classification</p>
                         <div class="d-flex justify-content-between align-items-center">
                             <div class="btn-group">
-                                <a type="submit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" asp-controller="Home" asp-action="Product">Add</a>
+                                <a type="submit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-secondary" asp-controller="Home" asp-action="Product">Добавить</a>
                             </div>
                             <label class="text-muted">@item.Price рб</label>
                         </div>

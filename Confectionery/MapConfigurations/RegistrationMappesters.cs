@@ -30,7 +30,7 @@ namespace Confectionery.Mappers
                   .RequireDestinationMemberSource(true);
 
             config.NewConfig<DescriptionOrder, BascetViewModel>()
-                  .MapWith(x => new BascetViewModel(x.AmountSweetStaff, x.SweetStaff.StaffName, x.SweetStaff.Weight, x.SweetStaff.Price, x.SweetStaff.Calories))
+                  .MapWith(x => new BascetViewModel((int)x.DescriptionId,x.AmountSweetStaff, x.SweetStaff.StaffName, x.SweetStaff.Weight, x.SweetStaff.Price, x.SweetStaff.Calories,x.StaffId))
                   .RequireDestinationMemberSource(true);
         }   
     }

@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
 </head>
 <body>
-<form asp-action="AddOrder" asp-controller="Account" class="h-100 mt-5 mb-5" method="post">
-  <div class="container h-100 py-5">
-    <div class="row d-flex justify-content-center align-items-center h-100">
+<form class="h-100 mt-5 mb-5">
+  <div class="h-100 py-5">
+    <div class="row d-flex justify-content-center align-items-center h-100 w-100">
       <div class="col-10">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h3 class="fw-normal mb-0 text-black">Корзина</h3>
@@ -28,31 +28,26 @@
                   class="img-fluid rounded-3" alt="Cotton T-shirt">
               </div>
               <div class="col-md-3 col-lg-3 col-xl-3">
-                    <p class="lead fw-normal mb-2">@descorder.StaffName</p>
+                    <p class="lead fw-normal mb-2">Название: @descorder.StaffName</p>
                     <p>
                         <span class="text-muted">Калории: </span>@descorder.Calories г
                         <span class="text-muted">Вес: </span>@descorder.Weight г
                     </p>
               </div>
               <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                <button class="btn btn-link px-2"
-                  onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
-                  <i class="fas fa-minus"></i>
-                </button>
-
-                <input min="0" name="quantity" value="@descorder.AmountSweetStaff" type="number" class="form-control form-control-sm" />
-
-                <button class="btn btn-link px-2"
-                  onclick="this.parentNode.querySelector('input[type=number]').stepUp()">
-                  <i class="fas fa-plus"></i>
-                </button>
+                <div class="col-12">
+                    <div class="col-12 m-auto text-center fs-6">Колличество</div>
+                    <input min="0" name="quantity" disabled value="@descorder.AmountSweetStaff" type="number" class="form-control form-control-sm"/>
+                </div>
               </div>
-              <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                <h5 class="mb-0">@descorder.Price рб</h5>
+              <div class="col-md-3 col-lg-3 col-xl-3">
+                <h5 class="mb-0 mt-3 mt-md-0">Стоимость: @descorder.Price рб</h5>
               </div>
-              <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                <a href="#!" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
-              </div>
+                <div class="text-center d-flex w-100 mt-3 mt-md-0">
+                        <div class="m-auto col-md-4 col-6  h-100">
+                        <a asp-controller="User" asp-action="Bascet" asp-route-id="@descorder.DesciptionId" type="submit" class="btn btn-outline-danger w-100">Отмена</a>
+                    </div>
+                </div>
             </div>
           </div>
         </div>
@@ -68,8 +63,9 @@
         </div>*@
 
         <div class="card">
-          <div class="card-body">
-            <button type="submit" class="btn btn-warning btn-block btn-lg">Заказать</button>
+          <div class="card-body row text-center d-flex">
+            <button id="ButtonOrder"  type="submit" class="btn btn-warning btn-block btn-lg text-white col-12 col-md-3 col-lg-2 m-auto">Заказать</button>
+            <h5 class="col-12 col-md-9 col-lg-10 m-auto mt-2">Общая сумма заказа @Math.Round(Model.Sum(x => x.Price * x.AmountSweetStaff),2) рб</h5>
           </div>
         </div>
 
@@ -79,3 +75,28 @@
 </form>
 </body>
 </html>
+@section pageScripts
+    {
+        <script>
+                $('#ButtonOrder').on('click',function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("Order","User")',
+                data: null,
+                success: function(){
+                    Swal.fire({
+                    icon: 'success',
+                    title: 'Success add order',
+                    })
+                },
+                error : function(){
+                    Swal.fire({
+                    icon: 'error',
+                    title: 'Error add order',
+                    }) 
+                }
+            });
+        });                            
+        </script>
+}

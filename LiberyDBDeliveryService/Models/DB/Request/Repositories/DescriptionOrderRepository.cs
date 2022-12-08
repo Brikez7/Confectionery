@@ -13,7 +13,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         private const string _orderId = "@order_id";
         private const string _staff_id = "@staff_id";
         private const string _amount = "@amount";
-        private const string _description_id = "@description_id";
+        private const string description_id = "@description_id";
         private const string _user_id = "@user_id";
         public DescriptionOrderRepository(IDapperConnectionProvider connectiomProvider) : base(connectiomProvider)
         {
@@ -29,7 +29,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task<IEnumerable<DescriptionOrder>> GetBascket(int id_user)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            string sql = $"SELECT * FROM {table_name} LEFT JOIN {SweetStaffRepository.table_name} ON {table_name}.staff_id = {SweetStaffRepository.table_name}.staff_id WHERE {table_name}.user_id = {UserRepository._id};";
+            string sql = $"SELECT * FROM {table_name} LEFT JOIN {SweetStaffRepository.table_name} ON {table_name}.staff_id = {SweetStaffRepository.table_name}.staff_id WHERE {table_name}.user_id = {UserRepository._id} and {table_name}.order_id is null;";
 
 
             return await conn.QueryAsync< DescriptionOrder,SweetStaff,DescriptionOrder > (
@@ -75,7 +75,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task DeleteAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<DescriptionOrder>($"DELETE FROM {table_name} WHERE \"descriptionId\" = {id}");
+            await conn.QueryAsync<DescriptionOrder>($"DELETE FROM {table_name} WHERE description_id = {description_id}",new { description_id = id });
             return;
         }
 
