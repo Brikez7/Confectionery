@@ -11,20 +11,21 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
     {
         public const string table_name = "orders";
         public const string user_id = "@user_id";
+        public const string status_order = "@status_order";
         public OrderRepository(IDapperConnectionProvider connectiomProvider) : base(connectiomProvider)
         {
         }
 
-        public async Task AddAsync(int idUser)
+        public async Task AddAsync(Order order)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Order>($"INSERT INTO {table_name} (user_id) VALUES ({user_id});",new {user_id = idUser});
+            await conn.QueryAsync<Order>($"INSERT INTO {table_name} (user_id,status_order) VALUES ({user_id},{status_order});",new {user_id = order.UserId, status_order = (short)order.StatusOrder});
             return;
         }
 
         public async Task AddRangeAsync(List<Order> values)
         {
-/*            await using var conn = await ConnectiomProvider.GetConnectionAsync();
+/*          await using var conn = await ConnectiomProvider.GetConnectionAsync();
             StringBuilder stringQuery = new StringBuilder($"INSERT INTO {table_name} (\"userId\", \"orderDate\", total) VALUES ");
             foreach (var record in values)
                 stringQuery.Append($"({record.UserId},{record.DateOrder},{record.Total}),");
@@ -72,11 +73,6 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
             stringQuery.Append(';');
             await conn.QueryAsync<Order>(stringQuery.ToString());*/
             return;
-        }
-
-        public Task AddAsync(Order record)
-        {
-            throw new NotImplementedException();
         }
     }
 }

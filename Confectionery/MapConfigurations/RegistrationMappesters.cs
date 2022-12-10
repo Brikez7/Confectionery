@@ -25,13 +25,22 @@ namespace Confectionery.Mappers
                   .MapWith(x => new FStaffViewModel((int)x.StaffId,x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.Company.CompanyName))
                   .RequireDestinationMemberSource(true);
 
-            config.NewConfig<User, Order>()
-                  .MapWith(x => new Order((int)x.UserId, DateTime.Now))
-                  .RequireDestinationMemberSource(true);
-
             config.NewConfig<DescriptionOrder, BascetViewModel>()
                   .MapWith(x => new BascetViewModel((int)x.DescriptionId,x.AmountSweetStaff, x.SweetStaff.StaffName, x.SweetStaff.Weight, x.SweetStaff.Price, x.SweetStaff.Calories,x.StaffId))
+                  .RequireDestinationMemberSource(true);
+
+            config.NewConfig<User, UserViewModel>()
+                  .IgnoreNullValues(true)
+                  .IgnoreIf((x,d) => x.Orders.Count == 0,x => x.Orders)
+                  .MapWith(x => new UserViewModel(new UserAccountView(x.EmailUser, x.NameUser, x.TotalSpent),
+                                                  x.Orders != null ?
+                                                      x.Orders.Select(x => new OrderView(x.OrderId ?? -1, x.DateOrder, x.Total, x.StatusOrder, 
+                                                      x.DescriptionOrders != null ?
+                                                        x.DescriptionOrders.ToDictionary(u => u.SweetStaff.StaffName, u => (short)u.AmountSweetStaff)
+                                                      :new Dictionary<string, short>())).ToList() 
+                                                  : new List<OrderView>()))
                   .RequireDestinationMemberSource(true);
         }   
     }
 }
+

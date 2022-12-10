@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace LibraryDatabaseCoffe.Models.DB.Tables
+﻿namespace LibraryDatabaseCoffe.Models.DB.Tables
 {
     public enum StatusUser 
     {
@@ -16,7 +13,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
         public string EmailUser { get; set; }
         public string Password { get; set; }
         public StatusUser Status { get; set; } = StatusUser.User;
-        public double TotalSpent { get; set; } = 0;
+        public float TotalSpent { get; set; } = 0;
         public User(int? user_id, string user_name, string email, string password, StatusUser status)
         {
             UserId = user_id;
@@ -35,18 +32,18 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
             Status = (StatusUser)status;
             TotalSpent = total;
         }
-        public User(int? user_id, string user_name, string email, string password, StatusUser status, double total)
+        public User(int? user_id, string user_name, string email, string password, StatusUser status, float total)
         {
             UserId = user_id;
             NameUser = user_name;
             EmailUser = email;
             Password = password;
-            Status = (StatusUser)status;
+            Status = status;
             TotalSpent = total;
         }
         public int OrderId { get; set; }
         public List<Order> Orders { get; set; } = new List<Order>();
-        public User(int? user_id, string user_name, string email, string password, StatusUser status, double total, int orderId, List<Order> orders) : this(user_id, user_name, email, password, status, total)
+        public User(int? user_id, string user_name, string email, string password, StatusUser status, float total, int orderId, List<Order> orders) : this(user_id, user_name, email, password, status, total)
         {
             OrderId = orderId;
             Orders = orders;

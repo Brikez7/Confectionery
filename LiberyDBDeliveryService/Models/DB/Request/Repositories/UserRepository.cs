@@ -35,10 +35,11 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
             return await conn.QuerySingleAsync<bool>($"select exists (select true from {table_name} where {table_name}.user_name = {_name});", new { NameUser = name });
         }
-        public async Task<User> GetUserByEmailAndPassword(string email, string password)
+        public async Task<User?> GetUserByEmailAndPassword(string email, string password)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            return await conn.QuerySingleAsync<User>($"select * from {table_name} where email = {_email} and password = {_password} LIMIT 1;", new { EmailUser = email, Password = password });
+            var searchedUser = await conn.QueryAsync<User?>($"select * from {table_name} where email = {_email} and password = {_password} LIMIT 1;", new { EmailUser = email, Password = password });
+            return searchedUser.FirstOrDefault();
         }
         public async Task AddRangeAsync(List<User> values)
         {
@@ -53,7 +54,47 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
             await conn.QueryAsync<User>(stringQuery.ToString(),values.Select(x=> new { x.NameUser,x.EmailUser, x.Password,x.Status,x.TotalSpent}));*/
             return;
         }
+        public async Task<User?> GetFullInfoUser(int id_user)
+        {
+            await using var conn = await ConnectiomProvider.GetConnectionAsync();
+            string sql = $"SELECT * FROM {table_name} LEFT JOIN {OrderRepository.table_name} ON {table_name}.user_id = {OrderRepository.table_name}.user_id " +
+                                                    $"LEFT JOIN {DescriptionOrderRepository.table_name} ON {OrderRepository.table_name}.order_id = {DescriptionOrderRepository.table_name}.order_id " +
+                                                    $"LEFT JOIN {SweetStaffRepository.table_name} ON {SweetStaffRepository.table_name}.staff_id = {DescriptionOrderRepository.table_name}.staff_id " +
+                                                    $"WHERE {table_name}.user_id = {_id};";
 
+            User mainUser = null;
+            List<Order> mainOrders = new List<Order>();
+            List<DescriptionOrder> mainDescorders = new List<DescriptionOrder>();
+            List<SweetStaff> mainStaffs = new List<SweetStaff>();
+
+            var dataInfo = await conn.QueryAsync<User, Order, DescriptionOrder, SweetStaff, User>(
+                            sql,
+                            (user, orders, descOrders,staffs) =>
+                            {
+                                mainUser = user;
+                                if (orders != null)
+                                {
+                                    if (mainOrders.All(x => x.OrderId != orders.OrderId)) mainOrders.Add(orders);
+                                    mainDescorders.Add(descOrders);
+                                    mainStaffs.Add(staffs);
+                                }
+                                
+                                return user;
+                            },
+                            splitOn: "order_id,order_id,staff_id",
+                            param: new { id = id_user });
+
+            if (mainUser is null) 
+            {
+                return null;
+            }
+
+            mainDescorders.ForEach(x => x.SweetStaff = mainStaffs.First(y => x.StaffId == y.StaffId));
+            mainOrders.ForEach(x => x.DescriptionOrders = mainDescorders.Where(y => y.Orderid == x.OrderId).ToList());
+            mainUser.Orders = mainOrders;
+
+            return mainUser;
+        }
         public async Task<User> GetAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();

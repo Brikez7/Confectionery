@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace LibraryDatabaseCoffe.Models.DB.Tables
+﻿namespace LibraryDatabaseCoffe.Models.DB.Tables
 {
     public enum StatusOrder 
     {
@@ -16,31 +13,21 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
         public DateTime DateOrder { get; set; }
         public long Total { get; set; } = 0;
         public StatusOrder StatusOrder { get; set; } = StatusOrder.error;
-        public Order(int userId, DateTime dateORder, long total)
+        public Order(int userId, StatusOrder statusOrder)
         {
             UserId = userId;
-            DateOrder = dateORder;
-            Total = total;
+            StatusOrder = statusOrder;
         }
-        public Order(int? orderId, int userId, DateTime dateOrder, long total)
-        {
-            OrderId = orderId;
-            UserId = userId;
-            DateOrder = dateOrder;
-            Total = total;
-        }
-
+        //(System.Int32 order_id, System.Int32 user_id, System.DateTime order_date, System.Single total, System.Int16 status_order)
         public User? User { get; set; }
-        public Order(int? orderId, int userId, DateTime dateOrder, long total, User? user) : this(orderId, userId, dateOrder, total)
+        public List<DescriptionOrder> DescriptionOrders { get; set; } = new List<DescriptionOrder>();
+        public Order(int order_id, int user_id, DateTime order_date, float total, short status_order)
         {
-            User = user;
-        }
-
-        public Order(int userId, DateTime now)
-        {
-            UserId = userId;
-            Now = now;
-            Total = 0;
+            OrderId = order_id;
+            UserId = user_id;
+            DateOrder = order_date;
+            Total = (long)total;
+            StatusOrder = (StatusOrder)status_order;
         }
     }
 }

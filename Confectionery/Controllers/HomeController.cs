@@ -27,7 +27,7 @@ namespace Confectionery.Controllers
             Mapsters mapstersStaff = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Exception MapstersStaff");
             var requesGetAllSweets = await sweetStaffRepository.GetAllAsync();
 
-            return View(mapstersStaff.MapTo(requesGetAllSweets).ToList());
+            return View(mapstersStaff.MapToShortStaffs(requesGetAllSweets).ToList());
         }
         [HttpPost]
         public async Task<IActionResult> ProductAdd(DescriptionViewModel descriptionView) 
@@ -54,7 +54,7 @@ namespace Confectionery.Controllers
 
             var productsJoin = await sweetStaffRepository.GetFullAsync(id);
 
-            FStaffViewModel? product = mapstersStaff.Map(productsJoin.FirstOrDefault());
+            FStaffViewModel? product = mapstersStaff.MapToFullStaff(productsJoin.FirstOrDefault());
             SweetStaffOrdered = product;
             DescriptionViewModel orderView = new DescriptionViewModel(product);
 

@@ -1,0 +1,46 @@
+﻿using LibraryDatabaseCoffe.Models.DB.Tables;
+
+namespace Confectionery.ViewModels
+{
+    public class UserAccountView 
+    {
+        public string Email { get; set; }
+        public string Name { get; set; }
+        public float Total { get; set; }
+
+        public UserAccountView(string email, string name, float total)
+        {
+            Email = email;
+            Name = name;
+            Total = total;
+        }
+    }
+    public class OrderView 
+    {
+        public int Number { get; set; }
+        public DateTime DateGives { get; set; }
+        public float TotalSpent { get; set; }
+        public StatusOrder StatusOrder { get; set; }
+        public Dictionary<string, short> Staffs { get; set; }
+
+        public OrderView(int number, DateTime dateGives, float totalSpent, StatusOrder statusOrder, Dictionary<string, short> staffs)
+        {
+            Number = number;
+            DateGives = dateGives;
+            TotalSpent = totalSpent;
+            StatusOrder = statusOrder;
+            Staffs = staffs;
+        }
+    }
+    public class UserViewModel
+    {
+        public UserAccountView AccountView { get; set; }
+        public List<OrderView> Orders { get; set; }
+
+        public UserViewModel(UserAccountView accountView, List<OrderView> orders)
+        {
+            AccountView = accountView;
+            Orders = orders;
+        }
+    }
+}

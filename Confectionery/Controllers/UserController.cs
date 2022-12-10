@@ -31,7 +31,7 @@ namespace Confectionery.Controllers
         {
             UserRepository userRepository = HttpContext.RequestServices.GetService<UserRepository>() ?? throw new Exception("UserRepository is null");
             Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
-            User user = mapster.MapTo(registrationViewModel);
+            User user = mapster.MapToRegistratedUser(registrationViewModel);
             
             if (ModelState.IsValid)
             {
@@ -60,9 +60,18 @@ namespace Confectionery.Controllers
             }
         }
         [HttpGet]
-        public IActionResult Account() 
+        public async Task<IActionResult> Account() 
         {
-            return View();
+            UserRepository userRepository = HttpContext.RequestServices.GetService<UserRepository>() ?? throw new Exception("UserRepository is null");
+            Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
+
+            var usersData = await userRepository.GetFullInfoUser(Convert.ToInt32(User.Claims.FirstOrDefault().Value));
+
+            if(usersData is null) throw new Exception("Аккаунт не найден");
+            
+            var userData = mapster.MapToUserAccount(usersData);
+
+            return View(userData);
         }
         private async Task AddClaims(User user)
         {
@@ -97,7 +106,7 @@ namespace Confectionery.Controllers
                 Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
 
                 var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
-                IEnumerable<BascetViewModel> bascetView = mapster.Map(descriptionOrders);
+                IEnumerable<BascetViewModel> bascetView = mapster.MapToBascets(descriptionOrders);
 
                 return View(bascetView.ToList());
             }
@@ -117,7 +126,7 @@ namespace Confectionery.Controllers
                 await descriptionOrderRepository.DeleteAsync(id);
 
                 var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
-                IEnumerable<BascetViewModel> bascetView = mapster.Map(descriptionOrders);
+                IEnumerable<BascetViewModel> bascetView = mapster.MapToBascets(descriptionOrders);
 
                 return View(bascetView.ToList());
             }
@@ -127,7 +136,7 @@ namespace Confectionery.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> Order() 
+        public async Task<IActionResult> AddOrder() 
         {
             if (User.Identity is not null && User.Identity.IsAuthenticated)
             {
@@ -135,16 +144,16 @@ namespace Confectionery.Controllers
                 DescriptionOrderRepository descriptionOrderRepository = HttpContext.RequestServices.GetService<DescriptionOrderRepository>() ?? throw new Exception("UserRepository is null");
                 Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
 
-                await orderRepository.AddAsync(Convert.ToInt32(User.Claims.First().Value));
+                await orderRepository.AddAsync(new Order(Convert.ToInt32(User.Claims.First().Value),StatusOrder.expectation));
 
                 var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
-                IEnumerable<BascetViewModel> bascetView = mapster.Map(descriptionOrders);
+                IEnumerable<BascetViewModel> bascetView = mapster.MapToBascets(descriptionOrders);
 
-                return View(bascetView.ToList());
+                return View("Bascet",bascetView.ToList());
             }
             else
             {
-                return View();
+                return View("Bascet");
             }
         }
         [HttpPost]

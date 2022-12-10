@@ -8,13 +8,13 @@ namespace Confectionery.Mapers
     [Mapper]
     public interface IMapsters 
     {
-        public SStaffViewModel MapTo(SweetStaff sweetStaff);
-        public IEnumerable<SStaffViewModel> MapTo(IEnumerable<SweetStaff> enumerable);
-        public User MapTo(RegistrationViewModel sweetStaff);
-        public AutorisationViewModel MapTo(User sweetStaff);
-        public FStaffViewModel Map(SweetStaff sweetStaff);
-        public Order Map(User sweetStaff);
-        public BascetViewModel Map(DescriptionOrder sweetStaff);
-        public IEnumerable<BascetViewModel> Map(IEnumerable<DescriptionOrder> sweetStaff);
+        public SStaffViewModel MapToShortStaff(SweetStaff sweetStaff);
+        public IEnumerable<SStaffViewModel> MapToShortStaffs(IEnumerable<SweetStaff> enumerable);
+        public User MapToRegistratedUser(RegistrationViewModel sweetStaff);
+        public AutorisationViewModel MapToAutorisationUser(User sweetStaff);
+        public FStaffViewModel MapToFullStaff(SweetStaff sweetStaff);
+        public BascetViewModel MapToBascet(DescriptionOrder sweetStaff);
+        public IEnumerable<BascetViewModel> MapToBascets(IEnumerable<DescriptionOrder> sweetStaff);
+        public UserViewModel MapToUserAccount(User user);
     }
 }

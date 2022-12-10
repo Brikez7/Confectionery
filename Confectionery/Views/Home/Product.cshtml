@@ -54,9 +54,9 @@
             </div>
         <div class="row p-0 m-0 text-center ">
 
-        </div><!-- end row -->
+        </div>
     </div>
-</form><!-- end container -->
+</form><
 
 @section pageScripts
 {
@@ -64,20 +64,29 @@
         $('#ButtonAdd').on('click',function(e){
         e.preventDefault();
         const data = $('#FInfoProduct').serialize()
+        var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
         $.ajax({
             type: "POST",
             url: '@Url.Action("ProductAdd","Home")',
             data: data,
             success: function(){
-                Swal.fire({
-                icon: 'success',
-                title: 'Success add product',
-                })
+                if(userAuthorized){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Товар успешно добавлен',
+                    })
+                }
+                else{
+                    Swal.fire({
+                        icon: 'question',
+                        title: 'Вы должны авторезироваться',
+                    })
+                }
             },
             error : function(){
                 Swal.fire({
-                icon: 'error',
-                title: 'Error add product',
+                    icon: 'error',
+                    title: 'Произошла ошибка',
                 }) 
             }
         });
