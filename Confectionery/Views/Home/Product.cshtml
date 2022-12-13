@@ -34,14 +34,14 @@
             </div>
             <div class="col-12 col-md-6 row p-0 m-0 d-md-flex ps-2">
                 <div class="col-3 p-md-0 m-md-auto">
-                    <label onclick="Increment(@(Model.Staff.Price.ToString().Replace(',','.')));" class="btn text-center py-3 px-4 m-0 w-100 px-md-3 btn-outline-success">+</label>
+                    <label onclick="Decrement(@(Model.Staff.Price.ToString().Replace(',','.')));" class="btn text-center py-3 px-4 m-0 w-100 px-md-3 btn-outline-danger">-</label>
                 </div>
                 <div class="col-6 p-md-0 m-md-auto">
                     <input asp-for="Count" id="num" onchange="CalculatePrice(@(Model.Staff.Price.ToString().Replace(',','.')))" onkeypress="return (event.charCode >= 48 && event.charCode <= 57 && /^\d{0,3}$/.test(this.value));" class="btn text-center py-3 p-0 w-75 text-center" value="0" type="number"/>
                     <span asp-validation-for="Count" class="text-danger"></span>
                 </div>
                 <div class="col-3 p-md-0 m-md-auto">
-                    <label onclick="Decrement(@(Model.Staff.Price.ToString().Replace(',','.')));" class="btn text-center py-3 px-4 m-0 w-100 px-md-3 btn-outline-danger">-</label>
+                    <label onclick="Increment(@(Model.Staff.Price.ToString().Replace(',','.')));" class="btn text-center py-3 px-4 m-0 w-100 px-md-3 btn-outline-success">+</label>
                 </div>
             </div>
         </div>
@@ -62,6 +62,7 @@
 {
     <script>
         $('#ButtonAdd').on('click',function(e){
+
         e.preventDefault();
         const data = $('#FInfoProduct').serialize()
         var userAuthorized = @User.Identity.IsAuthenticated.ToString().ToLower();
@@ -75,6 +76,8 @@
                         icon: 'success',
                         title: 'Товар успешно добавлен',
                     })
+                    document.getElementById("num").value = 0;
+                    document.getElementById("PriceProduct").textContent = "Общая стоимость " +  0 + " pб";
                 }
                 else{
                     Swal.fire({

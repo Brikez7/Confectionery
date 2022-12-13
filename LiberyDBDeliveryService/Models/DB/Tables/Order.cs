@@ -1,10 +1,13 @@
-﻿namespace LibraryDatabaseCoffe.Models.DB.Tables
+﻿using System.Configuration;
+using System.Diagnostics;
+
+namespace LibraryDatabaseCoffe.Models.DB.Tables
 {
-    public enum StatusOrder 
+    public enum StatusOrder
     {
         error = -1,
         expectation = 0,
-        success = 1,
+        success = 1
     }
     public class Order
     {

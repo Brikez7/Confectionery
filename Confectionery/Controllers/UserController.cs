@@ -49,7 +49,6 @@ namespace Confectionery.Controllers
                 await userRepository.AddAsync(user);
                 ModelState.Clear();
 
-
                 await AddClaims(await userRepository.GetUserByEmailAndPassword(user.EmailUser,user.Password));
                 
                 return RedirectToAction("Main", "Home");
@@ -156,6 +155,12 @@ namespace Confectionery.Controllers
                 return View("Bascet");
             }
         }
+        [HttpGet]
+        public async Task<IActionResult> LogOut() 
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Main","Home");
+        }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Autorisation(AutorisationViewModel autorisationView)
@@ -184,11 +189,6 @@ namespace Confectionery.Controllers
                 ModelState.AddModelError("Password", "неправильное имя или пароль");
                 return View(autorisationView);
             }
-        }
-        [ValidateAntiForgeryToken]
-        public IActionResult LogOut() 
-        {
-            return View();
         }
     }
 }

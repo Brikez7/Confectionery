@@ -15,7 +15,7 @@ namespace Confectionery.ViewModels
             Total = total;
         }
     }
-    public class OrderView 
+    public class OrderView
     {
         public int Number { get; set; }
         public DateTime DateGives { get; set; }
@@ -30,6 +30,16 @@ namespace Confectionery.ViewModels
             TotalSpent = totalSpent;
             StatusOrder = statusOrder;
             Staffs = staffs;
+        }
+        public string ToStringStatus()
+        {
+            switch (StatusOrder)
+            {
+                case StatusOrder.error: return "Некорректный заказ";
+                case StatusOrder.expectation: return "Ожидающий зааказ";
+                case StatusOrder.success: return "Выполненный заказ";
+                default: throw new Exception("Error");
+            }
         }
     }
     public class UserViewModel

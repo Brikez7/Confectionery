@@ -75,8 +75,8 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
                                 if (orders != null)
                                 {
                                     if (mainOrders.All(x => x.OrderId != orders.OrderId)) mainOrders.Add(orders);
-                                    mainDescorders.Add(descOrders);
-                                    mainStaffs.Add(staffs);
+                                    if(descOrders != null) mainDescorders.Add(descOrders);
+                                    if(staffs != null) mainStaffs.Add(staffs);
                                 }
                                 
                                 return user;
