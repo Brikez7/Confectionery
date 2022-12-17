@@ -13,6 +13,7 @@ img {
     max-width: 100%;
 }
 
+
 @font-face {
     font-family: Lord_Spirit;
     src: url('../fonts/LordSpiritRegular-L3DwG.ttf');
@@ -120,7 +121,7 @@ body {
     margin-top: 7em;
 }
 #CarouselTopInfo {
-    margin-top: 4em;
+    margin-top: 7em;
 }
 .ButtonDelete {
     height: 3em;
@@ -128,4 +129,13 @@ body {
 }
 #SectionOrders {
     margin-top: 5em;
+}
+.CardZoom:hover {
+    transform: scale(1.1);
+}
+.CardZoom {
+    transition: 1s;
+}
+.imgSlize {
+    background-size: 100% 100%;
 }

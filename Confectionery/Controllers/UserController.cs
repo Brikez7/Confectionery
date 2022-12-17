@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity;
 using Confectionery.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using Confectionery.Filters;
 
 namespace Confectionery.Controllers
 {
@@ -59,6 +61,7 @@ namespace Confectionery.Controllers
             }
         }
         [HttpGet]
+        [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> Account() 
         {
             UserRepository userRepository = HttpContext.RequestServices.GetService<UserRepository>() ?? throw new Exception("UserRepository is null");
@@ -87,6 +90,7 @@ namespace Confectionery.Controllers
                     new Claim(ClaimTypes.NameIdentifier,(user.UserId ?? -1).ToString()),
                     new Claim(ClaimsIdentity.DefaultNameClaimType,user.NameUser),
                     new Claim(ClaimTypes.Email,user.EmailUser),
+                    new Claim(ClaimTypes.Role,user.Status.ToString()),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType,user.Status.ToString()),
                 };
             }
@@ -97,6 +101,7 @@ namespace Confectionery.Controllers
             return View();
         }
         [HttpGet]
+        [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> Bascet()
         {
             if (User.Identity is not null && User.Identity.IsAuthenticated)
@@ -115,6 +120,7 @@ namespace Confectionery.Controllers
             }
         }
         [Route("{id:int}")]
+        [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> Bascet(int id) 
         {
             if (User.Identity is not null && User.Identity.IsAuthenticated)
@@ -135,6 +141,7 @@ namespace Confectionery.Controllers
             }
         }
         [HttpPost]
+        [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> AddOrder() 
         {
             if (User.Identity is not null && User.Identity.IsAuthenticated)
@@ -156,6 +163,7 @@ namespace Confectionery.Controllers
             }
         }
         [HttpGet]
+        [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> LogOut() 
         {
             await HttpContext.SignOutAsync();

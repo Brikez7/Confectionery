@@ -3,7 +3,6 @@ using LibraryDatabaseCoffe.Models.DB.Context.Connection;
 using LibraryDatabaseCoffe.Models.DB.Context.ConnectionProviders;
 using LibraryDatabaseCoffe.Models.DB.Context.@interface;
 using LibraryDatabaseCoffe.Models.DB.Request.Repositories;
-using Mapster;
 using MapsterMapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -59,7 +58,6 @@ namespace Confectionery
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
-
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();

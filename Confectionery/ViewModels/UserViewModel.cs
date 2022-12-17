@@ -36,7 +36,8 @@ namespace Confectionery.ViewModels
             switch (StatusOrder)
             {
                 case StatusOrder.error: return "Некорректный заказ";
-                case StatusOrder.expectation: return "Ожидающий зааказ";
+                case StatusOrder.expectation: return "Ожидадание подтверждения";
+                case StatusOrder.expecyation_get: return "Ожидания получения";
                 case StatusOrder.success: return "Выполненный заказ";
                 default: throw new Exception("Error");
             }

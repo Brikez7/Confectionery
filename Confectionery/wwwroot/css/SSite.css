@@ -21,3 +21,34 @@
     box-shadow: 3px 4px 57px -25px rgba(34, 60, 80, 0.2);
   }
 }
+
+@media screen and (min-width: 576px) and (max-width: 768px) {
+  .CaruselScale {
+    width: 500px;
+    height: 400px;
+  }
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  .CaruselScale {
+    width: 680px;
+    height: 544px;
+  }
+}
+@media screen and (min-width: 992px) and (max-width: 1200px) {
+  .CaruselScale {
+    width: 800px;
+    height: 640px;
+  }
+}
+@media screen and (min-width: 1200px) and (min-widht: 1400px) {
+  .CaruselScale {
+    width: 1050px;
+    height: 810px;
+  }
+}
+@media screen and (min-widht: 1400px) {
+  .CaruselScale {
+    width: 1150px;
+    height: 690px;
+  }
+}

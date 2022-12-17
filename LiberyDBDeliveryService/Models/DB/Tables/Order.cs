@@ -7,7 +7,8 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
     {
         error = -1,
         expectation = 0,
-        success = 1
+        expecyation_get = 1,
+        success = 2
     }
     public class Order
     {

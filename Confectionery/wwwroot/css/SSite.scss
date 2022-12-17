@@ -1,20 +1,55 @@
-﻿.headerMain {
-    @media screen and (min-width: 992px) {
+﻿$Small: 576px;
+$Medium: 576px;
+$Large: 768px;
+$XLarge: 992px;
+$XXLarge: 1200px;
+$XXXLarge: 1400px;
+
+.headerMain {
+    @media screen and (min-width: $XLarge) {
         height: 4rem;
     }
+
     transition: 0.3s;
 }
 
 .ShowLg {
-    @media screen and (min-width: 992px) {
+    @media screen and (min-width: $XLarge) {
         -webkit-box-shadow: 0px 0px 34px 0px rgba(255, 0, 0, 0.2);
         -moz-box-shadow: 0px 0px 34px 0px rgba(255, 0, 0, 0.2);
         box-shadow: 0px 0px 34px 0px rgba(255, 0, 0, 0.2);
     }
 
-    @media screen and (max-width: 992px) {
+    @media screen and (max-width: $XLarge) {
         -webkit-box-shadow: 3px 4px 57px -25px rgba(34, 60, 80, 0.2);
         -moz-box-shadow: 3px 4px 57px -25px rgba(34, 60, 80, 0.2);
         box-shadow: 3px 4px 57px -25px rgba(34, 60, 80, 0.2);
+    }
+}
+
+.CaruselScale {
+    @media screen and (min-width: $Medium) and (max-width: $Large) {
+        width: 500px;
+        height: 400px;
+    }
+
+    @media screen and (min-width: $Large) and (max-width: $XLarge) {
+        width: 680px;
+        height: 544px;
+    }
+
+    @media screen and (min-width: $XLarge) and (max-width: $XXLarge) {
+        width: 800px;
+        height: 640px;
+    }
+
+    @media screen and (min-width: $XXLarge) and (min-widht: $XXXLarge) {
+        width: 1050px;
+        height: 810px;
+    }
+
+    @media screen and (min-widht: $XXXLarge) {
+        width: 1150px;
+        height: 690px;
     }
 }
