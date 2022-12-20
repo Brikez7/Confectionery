@@ -1,5 +1,10 @@
 ﻿using Confectionery.Filters;
+using Confectionery.Mapers;
+using Confectionery.ViewModels;
+using LibraryDatabaseCoffe.Models.DB.Request.Repositories;
+using LibraryDatabaseCoffe.Models.DB.Tables;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Confectionery.Controllers
 {
@@ -13,7 +18,78 @@ namespace Confectionery.Controllers
             _logger = logger;
             _configuration = configuration;
         }
-        public ActionResult AdminPanel()
+        public async Task<IActionResult> PanelCompany()
+        {
+            var CompanyRepository = HttpContext.RequestServices.GetService<CompanyRepository>();
+            var mapper = HttpContext.RequestServices.GetService<Mapsters>();
+
+            var companiesDB = await CompanyRepository.GetAllAsync();
+            List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
+            CompanyControlViewModel companyControlView = new CompanyControlViewModel(CompanyList);
+
+            return View(companyControlView);
+        }
+        public async Task<IActionResult> AddCompany(CompanyControlViewModel companyControlView) 
+        {
+            var CompanyRepository = HttpContext.RequestServices.GetService<CompanyRepository>();
+            var mapper = HttpContext.RequestServices.GetService<Mapsters>();
+
+            if (ModelState.IsValid)
+            {
+                var company = mapper.MapToCompany(companyControlView.NewCompany);
+                CompanyRepository.AddAsync(company);
+            }
+            else 
+            {
+                return View("PanelCompany", companyControlView);
+            }
+
+            var companiesDB = await CompanyRepository.GetAllAsync();
+            List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
+            CompanyControlViewModel updateCompanyControlView = new CompanyControlViewModel(CompanyList);
+
+            return View("PanelCompany", updateCompanyControlView);
+        }
+        [Route("{id:int}")]
+        public async Task<IActionResult> DeleteCompany(int id)
+        {
+            var CompanyRepository = HttpContext.RequestServices.GetService<CompanyRepository>();
+            var mapper = HttpContext.RequestServices.GetService<Mapsters>();
+
+            CompanyRepository.DeleteAsync(id);
+
+            var companiesDB = await CompanyRepository.GetAllAsync();
+            List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
+            CompanyControlViewModel updateCompanyControlView = new CompanyControlViewModel(CompanyList);
+
+            return View("PanelCompany", updateCompanyControlView);
+        }
+        public async Task<IActionResult> ChangeCompany(CompanyControlViewModel companyControlView)
+        {
+            var CompanyRepository = HttpContext.RequestServices.GetService<CompanyRepository>();
+            var mapper = HttpContext.RequestServices.GetService<Mapsters>();
+
+            if (ModelState.IsValid)
+            {
+                var company = mapper.MapToCompany(companyControlView.NewCompany);
+
+                CompanyRepository.UpdateAsync((int)company.CompanyId, company);
+            }
+            else 
+            {
+                return View("PanelCompany",companyControlView);
+            }
+            var companiesDB = await CompanyRepository.GetAllAsync();
+            List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
+            CompanyControlViewModel updateCompanyControlView = new CompanyControlViewModel(CompanyList);
+
+            return View("PanelCompany", updateCompanyControlView);
+        }
+        public ActionResult PanelOrder()
+        {
+            return View();
+        }
+        public ActionResult PanelStaff()
         {
             return View();
         }

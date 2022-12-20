@@ -10,6 +10,11 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
     public class CompanyRepository : AbstractRepository, IRepositiry<Company>
     {
         public const string table_name = "company";
+        public const string company_id = "company_id";
+        public const string company_name = "company_name";
+        public const string owner = "owner";
+        public const string telephone = "telephone";
+        public const string banking_account = "banking_account";
         public CompanyRepository(IDapperConnectionProvider connectiomProvider) : base(connectiomProvider)
         {
         }
@@ -17,7 +22,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task AddAsync(Company record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Company>($"INSERT INTO {table_name} ( \"companyName\", owner, telephone, \"bankingAccount\") VALUES ( {record.CompanyName}, {record.Owner}, {record.Telephone}, {record.BankingAccount});");
+            await conn.QueryAsync<Company>($"INSERT INTO {table_name} ( {company_name}, {owner}, {telephone}, {banking_account}) VALUES ( @{company_name}, @{owner}, @{telephone}, @{banking_account});", new { company_name = record.CompanyName, owner = record.Owner, telephone = record.Telephone, banking_account = record.BankingAccount });
         }
 
         public async Task AddRangeAsync(List<Company> values)

@@ -20,7 +20,16 @@ namespace Confectionery.Filters
                 );
                 return Task.CompletedTask;
             }
-            else 
+            else if (context.HttpContext.User.IsInRole("Admin")) 
+            {
+                context.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary(
+                        new { action = "PanelCompany", controller = "Admin" }
+                    )
+                );
+                return Task.CompletedTask;
+            }
+            else
             {
                 return Task.CompletedTask;
             }

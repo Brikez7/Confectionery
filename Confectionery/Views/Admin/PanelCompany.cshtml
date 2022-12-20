@@ -1,0 +1,177 @@
+﻿@using Confectionery.ViewModels
+@model CompanyControlViewModel
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+</head>
+<body class="AdminPanel p-0 ">
+    <form id="FInfoAddCompany" class="row d-md-flex mt-4">
+        <div class="col-2">
+            <label asp-for="NewCompany.CompanyName" class="form-label"></label>
+            <input type="text" asp-for="NewCompany.CompanyName" placeholder="Company name" class="form-control">
+            <span asp-validation-for="NewCompany.CompanyName" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.Telephone" class="form-label"></label>
+            <input type="text" placeholder="Telephone" asp-for="NewCompany.Telephone" class="form-control">
+            <span asp-validation-for="NewCompany.Telephone" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.Owner" class="form-label"></label>
+            <input type="text" placeholder="Name owner" asp-for="NewCompany.Owner" class="form-control">
+            <span asp-validation-for="NewCompany.Owner" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.BankingAccount" class="form-label"></label>
+            <input type="number" placeholder="Banking account" asp-for="NewCompany.BankingAccount" class="form-control">
+            <span asp-validation-for="NewCompany.BankingAccount" class="text-danger"></span>
+        </div>
+        <div class="col-2 d-flex align-items-end">
+            <button id="AddCompany" type="submit" asp-controller="Admin" asp-action="AddCompany" class="btn container btn-success">Add Compnay</button>
+        </div>
+        <div class="col-2 border-1 border-secondary"></div>
+    </form>
+    <form class="row d-md-flex mt-5">
+        <div class="col-2">
+            <label asp-for="NewCompany.CompanyName" class="form-label"></label>
+            <select id="SelectId" asp-for="NewCompany.CompanyId" class="col-3 form-control">
+                @foreach(var Company in Model.CompanyList){
+                    <option value="@Company">@Company.CompanyId</option>
+                }
+            </select>
+            <span asp-validation-for="NewCompany.CompanyName" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.CompanyName" class="form-label"></label>
+            <input id="CCompanyName" type="text" placeholder="Company name" asp-for="NewCompany.CompanyName" class="col-3 form-control">
+            <span asp-validation-for="NewCompany.CompanyName" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.Telephone" class="form-label"></label>
+            <input id="CTelephone" type="text" placeholder="Telephone" asp-for="NewCompany.Telephone" class="col-3 form-control">
+            <span asp-validation-for="NewCompany.Telephone" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.Owner" class="form-label"></label>
+            <input id="COwner" type="text" placeholder="Name owner" asp-for="NewCompany.Owner" class="form-control">
+            <span asp-validation-for="NewCompany.Owner" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewCompany.BankingAccount" class="form-label"></label>
+            <input id="CBankingAccount" type="number" placeholder="Banking account" asp-for="NewCompany.BankingAccount" class="col-3 form-control">
+            <span asp-validation-for="NewCompany.BankingAccount" class="text-danger"></span>
+        </div>
+        <div class="col-2 m-0 p-0  d-flex align-items-end">
+            <button type="submit" asp-action="ChangeCompany" asp-controller="Admin" class="btn btn-primary">Change company</button>
+        </div>
+    </form>
+    <table id="TableCompany" class="table mt-5">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Telephone</th>
+                <th scope="col">Name company</th>
+                <th scope="col">Banking account</th>
+                <th scope="col">Name owner</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody id="Etriers">
+        @foreach(var compnay in Model.CompanyList){
+            <tr>
+                <td>@compnay.CompanyId</td>
+                <td>@compnay.Telephone</td>
+                <td>@compnay.CompanyName</td>
+                <td>@compnay.BankingAccount</td>
+                <td>@compnay.Owner</td>
+                <td><button type="submit" class="btn btn-outline-danger col-10" asp-route-id="@compnay.CompanyId" asp-controller="Admin" asp-action="DeleteCompany">Delete</button></td>
+            </tr>        
+        }
+        </tbody>
+    </table>
+</body>
+</html>
+@section pageScripts
+{
+<script>
+    let companys = @Json.Serialize(Model.CompanyList);
+
+    console.log(companys)
+    function ClearInputs(){
+        document.getElementsByName("CompanyName").textContent = "";
+        document.getElementsByName("Telephone").textContent = "";
+        document.getElementsByName("Owner").textContent = "";
+        document.getElementsByName("BankingAccount").textContent = "";
+    }
+    function AddCompany(data){
+        var body = $('#Etriers');
+
+        var tr = $('<tr>');
+
+        for(let field in data)
+        {
+            var td = $('<td>');
+            td.text(data[field]);
+            tr.append(td);
+        }
+
+        body.prepend(tr);
+    }
+    $('#AddCompany').on('click',function(e){
+        e.preventDefault();
+        var _this = $(this);
+        var _form = _this.closest("form");
+
+        _form.validate();
+        var isvalid = _form .valid();
+        if(isvalid){
+            const data = $('#FInfoAddCompany').serialize()
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddCompany","Admin")',
+                data:data,
+                success: function(){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success add company',
+                    })
+                    ClearInputs()
+                    AddCompany(data)
+                },
+                error : function(){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error add company',
+                    })
+                    ClearInputs()
+                }
+            });
+        }
+    });
+    function search(Key, myArray){
+        for(var obj in myArray){
+            if(obj == Key){
+                console.log(myArray[obj]);
+                return myArray[obj];
+            }
+        }
+    }
+    
+    $('#SelectId').on('change', function() {
+            result = $('#SelectId :selected').text();
+
+                //console.log(companys)
+                //console.log(result)
+        obj = search(result,companys)
+
+        console.log(obj)
+
+        $('#CCompanyName').val(obj.companyName);
+        $('#CTelephone').val(obj.telephone);
+        $('#COwner').val(obj.owner);
+        $('#CBankingAccount').val(obj.bankingAccount);
+    });
+</script>
+}

@@ -40,6 +40,13 @@ namespace Confectionery.Mappers
                                                       :new Dictionary<string, short>())).ToList() 
                                                   : new List<OrderView>()))
                   .RequireDestinationMemberSource(true);
+            config.NewConfig<Company, CompanyViewModel>()
+                  .MapWith(x => new CompanyViewModel(x.CompanyId, x.CompanyName, x.Owner, x.Telephone, x.BankingAccount))
+                  .RequireDestinationMemberSource(true);
+
+            config.NewConfig<CompanyViewModel, Company>()
+                  .MapWith(x => new Company(x.CompanyId, x.CompanyName, x.Owner, x.Telephone, x.BankingAccount))
+                  .RequireDestinationMemberSource(true);
         }   
     }
 }

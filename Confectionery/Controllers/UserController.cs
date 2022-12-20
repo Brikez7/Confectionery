@@ -33,7 +33,7 @@ namespace Confectionery.Controllers
         {
             UserRepository userRepository = HttpContext.RequestServices.GetService<UserRepository>() ?? throw new Exception("UserRepository is null");
             Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
-            User user = mapster.MapToRegistratedUser(registrationViewModel);
+            User user = mapster.MapToUser(registrationViewModel);
             
             if (ModelState.IsValid)
             {
@@ -71,7 +71,7 @@ namespace Confectionery.Controllers
 
             if(usersData is null) throw new Exception("Аккаунт не найден");
             
-            var userData = mapster.MapToUserAccount(usersData);
+            var userData = mapster.MapToViewUserAccount(usersData);
 
             return View(userData);
         }
@@ -110,7 +110,7 @@ namespace Confectionery.Controllers
                 Mapsters mapster = HttpContext.RequestServices.GetService<Mapsters>() ?? throw new Exception("Mapsters is null");
 
                 var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
-                IEnumerable<BascetViewModel> bascetView = mapster.MapToBascets(descriptionOrders);
+                IEnumerable<BascetViewModel> bascetView = mapster.MapToViewBascets(descriptionOrders);
 
                 return View(bascetView.ToList());
             }
@@ -131,7 +131,7 @@ namespace Confectionery.Controllers
                 await descriptionOrderRepository.DeleteAsync(id);
 
                 var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
-                IEnumerable<BascetViewModel> bascetView = mapster.MapToBascets(descriptionOrders);
+                IEnumerable<BascetViewModel> bascetView = mapster.MapToViewBascets(descriptionOrders);
 
                 return View(bascetView.ToList());
             }
@@ -153,7 +153,7 @@ namespace Confectionery.Controllers
                 await orderRepository.AddAsync(new Order(Convert.ToInt32(User.Claims.First().Value),StatusOrder.expectation));
 
                 var descriptionOrders = await descriptionOrderRepository.GetBascket(Convert.ToInt32((User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier) ?? new Claim(ClaimTypes.Upn, "-1")).Value));
-                IEnumerable<BascetViewModel> bascetView = mapster.MapToBascets(descriptionOrders);
+                IEnumerable<BascetViewModel> bascetView = mapster.MapToViewBascets(descriptionOrders);
 
                 return View("Bascet",bascetView.ToList());
             }

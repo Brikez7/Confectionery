@@ -9,37 +9,61 @@ namespace Confectionery.Mapers
 {
     public partial class Mapsters : IMapsters
     {
-        public SStaffViewModel MapToShortStaff(SweetStaff x)
+        public SStaffViewModel MapToShortViewStaff(SweetStaff x)
         {
             return new SStaffViewModel((int)x.StaffId, x.StaffName, x.Classification, x.Price);
         }
-        public IEnumerable<SStaffViewModel> MapToShortStaffs(IEnumerable<SweetStaff> p1)
+        public IEnumerable<SStaffViewModel> MapToShortViewStaffs(IEnumerable<SweetStaff> p1)
         {
             return p1 == null ? null : p1.Select<SweetStaff, SStaffViewModel>(funcMain1);
         }
-        public User MapToRegistratedUser(RegistrationViewModel x)
+        public User MapToUser(RegistrationViewModel x)
         {
             return new User(x.Name, x.Email, x.Password);
         }
-        public AutorisationViewModel MapToAutorisationUser(User x)
+        public AutorisationViewModel MapToViewAutorisationUser(User x)
         {
             return new AutorisationViewModel(x.EmailUser, x.Password);
         }
-        public FStaffViewModel MapToFullStaff(SweetStaff x)
+        public FStaffViewModel MapToFullViewStaff(SweetStaff x)
         {
             return new FStaffViewModel((int)x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.Company.CompanyName);
         }
-        public BascetViewModel MapToBascet(DescriptionOrder x)
+        public BascetViewModel MapToViewBascet(DescriptionOrder x)
         {
             return new BascetViewModel((int)x.DescriptionId, x.AmountSweetStaff, x.SweetStaff.StaffName, x.SweetStaff.Weight, x.SweetStaff.Price, x.SweetStaff.Calories, x.StaffId);
         }
-        public IEnumerable<BascetViewModel> MapToBascets(IEnumerable<DescriptionOrder> p3)
+        public IEnumerable<BascetViewModel> MapToViewBascets(IEnumerable<DescriptionOrder> p3)
         {
             return p3 == null ? null : p3.Select<DescriptionOrder, BascetViewModel>(funcMain2);
         }
-        public UserViewModel MapToUserAccount(User x)
+        public UserViewModel MapToViewUserAccount(User x)
         {
             return new UserViewModel(new UserAccountView(x.EmailUser, x.NameUser, x.TotalSpent), x.Orders != null ? x.Orders.Select<Order, OrderView>(funcMain3).ToList<OrderView>() : new List<OrderView>());
+        }
+        public List<CompanyViewModel> MapToViewCompanies(List<Company> p5)
+        {
+            if (p5 == null)
+            {
+                return null;
+            }
+            List<CompanyViewModel> result = new List<CompanyViewModel>(p5.Count);
+            
+            int i = 0;
+            int len = p5.Count;
+            
+            while (i < len)
+            {
+                Company item = p5[i];
+                result.Add(new CompanyViewModel(item.CompanyId, item.CompanyName, item.Owner, item.Telephone, item.BankingAccount));
+                i++;
+            }
+            return result;
+            
+        }
+        public Company MapToCompany(CompanyViewModel x)
+        {
+            return new Company(x.CompanyId, x.CompanyName, x.Owner, x.Telephone, x.BankingAccount);
         }
         
         private SStaffViewModel funcMain1(SweetStaff p2)
