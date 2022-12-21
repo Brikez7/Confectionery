@@ -119,7 +119,7 @@ namespace Confectionery.Controllers
                 return View();
             }
         }
-        [Route("{id:int}")]
+        [Route("/AddOrder/{id:int}")]
         [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> Bascet(int id) 
         {

@@ -9,17 +9,8 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
         public string Owner { get; set; }
         public string Telephone { get; set; }
         public long BankingAccount { get; set; }
-        //(System.Int32 company_id, System.String company_name, System.String owner, System.String telephone, System.Int64 banking_account)
         public Company(string company_name, string owner, string telephone, long banking_account)
         {
-            CompanyName = company_name;
-            Owner = owner;
-            Telephone = telephone;
-            BankingAccount = banking_account;
-        }
-        public Company(int company_id, string company_name, string owner, string telephone, long banking_account)
-        {
-            CompanyId = company_id;
             CompanyName = company_name;
             Owner = owner;
             Telephone = telephone;

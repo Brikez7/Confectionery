@@ -12,9 +12,8 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
         public float Price { get; set; }
         public float Calories { get; set; }
         public string Classification { get; set; }
-        //(System.Int32 staff_id, System.String staff_name, System.DateTime date_receipt, System.Int32 company_id, System.Single weight, System.String classification, System.Single price, System.Single calories)
-        //(System.Single calories, System.Int32 company_id, System.String company_name, System.String owner, System.String telephone, System.Int64 banking_account)
-        public SweetStaff(int? staff_id, string staff_name, DateTime date_receipt, float weight, float price, float calories, string classification)
+        
+        public SweetStaff(int? staff_id, string staff_name, DateTime date_receipt, float weight, float price, float calories, string classification,int? company_id)
         {
             StaffId = staff_id;
             StaffName = staff_name;
@@ -23,8 +22,9 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
             Price = price;
             Calories = calories;
             Classification = classification;
+            CompanyId = company_id;
         }
-        public SweetStaff(int staff_id, string staff_name, DateTime date_receipt, Single weight, Single price, Single calories, string classification)
+        public SweetStaff(int? staff_id, string staff_name, DateTime date_receipt, float weight, float price, float calories, string classification)
         {
             StaffId = staff_id;
             StaffName = staff_name;
@@ -37,11 +37,6 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
 
         public int? CompanyId { get; set; }
         public Company? Company { get; set; }
-        public SweetStaff(int? staff_id, string staff_name, DateTime date_receipt, int? company_id, float weight, string classification, float price, float calories) : this(staff_id, staff_name, date_receipt, weight, price, calories, classification)
-        {
-            CompanyId = company_id;
-        }
-
         public SweetStaff(int? staff_id, string staff_name, DateTime date_receipt, float weight, float price, float calories, string classification, int? company_id, Company? company) : this(staff_id, staff_name, date_receipt, weight, price, calories, classification)
         {
             CompanyId = company_id;

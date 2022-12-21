@@ -65,6 +65,30 @@ namespace Confectionery.Mapers
         {
             return new Company(x.CompanyId, x.CompanyName, x.Owner, x.Telephone, x.BankingAccount);
         }
+        public List<SweetStaffViewModel> MapToViewSweetStaffs(List<SweetStaff> p6)
+        {
+            if (p6 == null)
+            {
+                return null;
+            }
+            List<SweetStaffViewModel> result = new List<SweetStaffViewModel>(p6.Count);
+            
+            int i = 0;
+            int len = p6.Count;
+            
+            while (i < len)
+            {
+                SweetStaff item = p6[i];
+                result.Add(new SweetStaffViewModel(item.StaffId, item.StaffName, item.DateDeliver, item.Weight, item.Price, item.Calories, item.Classification, item.CompanyId));
+                i++;
+            }
+            return result;
+            
+        }
+        public SweetStaff MapToSweetStaffs(SweetStaffViewModel x)
+        {
+            return new SweetStaff(x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.CompanyId);
+        }
         
         private SStaffViewModel funcMain1(SweetStaff p2)
         {

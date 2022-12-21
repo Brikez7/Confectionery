@@ -51,14 +51,14 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task UpdateAsync(int id, Company record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Company>($"UPDATE {table_name} SET \"companyName\" = {record.CompanyName}, owner = {record.Owner}, telephone = {record.Telephone}, \"bankingAccount\" = {record.BankingAccount} WHERE \"companyId\" = {id};");
+            await conn.QueryAsync<Company>($"UPDATE {table_name} SET {company_name} = @{company_name}, {owner} = @{owner}, {telephone} = {telephone}, {banking_account} = @{banking_account} WHERE {company_id} = @{company_id};",new {company_name = record.CompanyName, owner = record.Owner,telephone = record.Telephone,banking_account = record.BankingAccount,company_id = id });
             return;
         }
 
         public async Task DeleteAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Company>($"DELETE FROM {table_name} WHERE \"companyId\" = {id};");
+            await conn.QueryAsync<Company>($"DELETE FROM {table_name} WHERE {company_id} = {id};");
             return;
         }
 

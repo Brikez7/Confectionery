@@ -47,6 +47,14 @@ namespace Confectionery.Mappers
             config.NewConfig<CompanyViewModel, Company>()
                   .MapWith(x => new Company(x.CompanyId, x.CompanyName, x.Owner, x.Telephone, x.BankingAccount))
                   .RequireDestinationMemberSource(true);
+
+            config.NewConfig<SweetStaffViewModel, SweetStaff>()
+                  .MapWith(x => new SweetStaff(x.StaffId,x.StaffName,x.DateDeliver,x.Weight,x.Price,x.Calories,x.Classification,x.CompanyId))
+                  .RequireDestinationMemberSource(true);
+
+            config.NewConfig<SweetStaff, SweetStaffViewModel > ()
+                  .MapWith(x => new SweetStaffViewModel(x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification,x.CompanyId))
+                  .RequireDestinationMemberSource(true);
         }   
     }
 }

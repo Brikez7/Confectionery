@@ -2,9 +2,7 @@
 using Confectionery.Mapers;
 using Confectionery.ViewModels;
 using LibraryDatabaseCoffe.Models.DB.Request.Repositories;
-using LibraryDatabaseCoffe.Models.DB.Tables;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Confectionery.Controllers
 {
@@ -37,7 +35,7 @@ namespace Confectionery.Controllers
             if (ModelState.IsValid)
             {
                 var company = mapper.MapToCompany(companyControlView.NewCompany);
-                CompanyRepository.AddAsync(company);
+                await CompanyRepository.AddAsync(company);
             }
             else 
             {
@@ -48,15 +46,15 @@ namespace Confectionery.Controllers
             List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
             CompanyControlViewModel updateCompanyControlView = new CompanyControlViewModel(CompanyList);
 
-            return View("PanelCompany", updateCompanyControlView);
+            return Json(updateCompanyControlView);
         }
-        [Route("{id:int}")]
-        public async Task<IActionResult> DeleteCompany(int id)
+        [Route("/DeleteCompany/{IdDeleteCompany:int}")]
+        public async Task<IActionResult> DeleteCompany(int IdDeleteCompany)
         {
             var CompanyRepository = HttpContext.RequestServices.GetService<CompanyRepository>();
             var mapper = HttpContext.RequestServices.GetService<Mapsters>();
 
-            CompanyRepository.DeleteAsync(id);
+            await CompanyRepository.DeleteAsync(IdDeleteCompany);
 
             var companiesDB = await CompanyRepository.GetAllAsync();
             List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
@@ -73,93 +71,33 @@ namespace Confectionery.Controllers
             {
                 var company = mapper.MapToCompany(companyControlView.NewCompany);
 
-                CompanyRepository.UpdateAsync((int)company.CompanyId, company);
+                await CompanyRepository.UpdateAsync((int)company.CompanyId, company);
             }
             else 
             {
-                return View("PanelCompany",companyControlView);
+                var companiesOld = await CompanyRepository.GetAllAsync();
+                List<CompanyViewModel> CompanyListOld = mapper.MapToViewCompanies(companiesOld.ToList());
+                CompanyControlViewModel OldCompanyControlView = new CompanyControlViewModel(CompanyListOld);
+                return View("PanelCompany", OldCompanyControlView);
             }
+
             var companiesDB = await CompanyRepository.GetAllAsync();
             List<CompanyViewModel> CompanyList = mapper.MapToViewCompanies(companiesDB.ToList());
+
             CompanyControlViewModel updateCompanyControlView = new CompanyControlViewModel(CompanyList);
 
             return View("PanelCompany", updateCompanyControlView);
         }
-        public ActionResult PanelOrder()
+        public async Task<IActionResult> PanelSweetStaff()
         {
-            return View();
-        }
-        public ActionResult PanelStaff()
-        {
-            return View();
-        }
-        // GET: AdminController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+            var SweetStaffRepository = HttpContext.RequestServices.GetService<SweetStaffRepository>();
+            var mapper = HttpContext.RequestServices.GetService<Mapsters>();
 
-        // GET: AdminController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            var SweetStaffsDB = await SweetStaffRepository.GetAllAsync();
+            List<SweetStaffViewModel> SweetStaffList = mapper.MapToViewSweetStaffs(SweetStaffsDB.ToList());
+            SweetStaffControlViewModel SweetStaffControlView = new SweetStaffControlViewModel(SweetStaffList);
 
-        // POST: AdminController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: AdminController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: AdminController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: AdminController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AdminController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return View(SweetStaffControlView);
         }
     }
 }

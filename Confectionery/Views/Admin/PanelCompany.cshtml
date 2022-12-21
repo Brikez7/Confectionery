@@ -5,7 +5,7 @@
 <head>
   <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
 </head>
-<body class="AdminPanel p-0 ">
+<body class="AdminPanel p-0 mb-5">
     <form id="FInfoAddCompany" class="row d-md-flex mt-4">
         <div class="col-2">
             <label asp-for="NewCompany.CompanyName" class="form-label"></label>
@@ -36,8 +36,8 @@
         <div class="col-2">
             <label asp-for="NewCompany.CompanyName" class="form-label"></label>
             <select id="SelectId" asp-for="NewCompany.CompanyId" class="col-3 form-control">
-                @foreach(var Company in Model.CompanyList){
-                    <option value="@Company">@Company.CompanyId</option>
+                @foreach (var Company in Model.CompanyList){    
+                    <option value="@Company.CompanyId">@Company.CompanyId</option>
                 }
             </select>
             <span asp-validation-for="NewCompany.CompanyName" class="text-danger"></span>
@@ -79,13 +79,13 @@
         </thead>
         <tbody id="Etriers">
         @foreach(var compnay in Model.CompanyList){
-            <tr>
+            <tr id=TR"@compnay.CompanyId">
                 <td>@compnay.CompanyId</td>
                 <td>@compnay.Telephone</td>
                 <td>@compnay.CompanyName</td>
                 <td>@compnay.BankingAccount</td>
                 <td>@compnay.Owner</td>
-                <td><button type="submit" class="btn btn-outline-danger col-10" asp-route-id="@compnay.CompanyId" asp-controller="Admin" asp-action="DeleteCompany">Delete</button></td>
+                <td><a type="submit" class="btn btn-outline-danger col-10" asp-route-IdDeleteCompany="@compnay.CompanyId" asp-controller="Admin" asp-action="DeleteCompany">Delete</a></td>
             </tr>        
         }
         </tbody>
@@ -97,26 +97,37 @@
 <script>
     let companys = @Json.Serialize(Model.CompanyList);
 
-    console.log(companys)
     function ClearInputs(){
-        document.getElementsByName("CompanyName").textContent = "";
-        document.getElementsByName("Telephone").textContent = "";
-        document.getElementsByName("Owner").textContent = "";
-        document.getElementsByName("BankingAccount").textContent = "";
+        $('#FInfoAddCompany')[0].reset();
     }
-    function AddCompany(data){
-        var body = $('#Etriers');
+    function AddCompany(companyId){
+        const formElement = document.querySelector('#FInfoAddCompany');
+        const formData = new FormData(formElement);
 
+        var body = $('#Etriers');
         var tr = $('<tr>');
 
-        for(let field in data)
+        var td = $('<td>');
+        td.text(companyId);
+        tr.append(td);
+        for(var data of formData.entries())
         {
             var td = $('<td>');
-            td.text(data[field]);
+            td.text(data[1]);
             tr.append(td);
         }
-
+        var td = $('<td><a type="submit" class="btn btn-outline-danger col-10" asp-route-IdDeleteCompany="${companyId}" asp-controller="Admin" asp-action="DeleteCompany">Delete</a></td>');
+        tr.append(td);
         body.prepend(tr);
+    }
+    function UpdateAddForms(){
+        var ids = companys.map(row=>[row['companyId']]);
+        let id = Math.max.apply(Math, ids);
+        for (var i=0;i < ids.length;i++){
+                $('<option/>').val(ids[i]).html(ids[i]).appendTo('#SelectId');
+        }
+        AddCompany(id);
+        ClearInputs();
     }
     $('#AddCompany').on('click',function(e){
         e.preventDefault();
@@ -132,13 +143,14 @@
                 type: "POST",
                 url: '@Url.Action("AddCompany","Admin")',
                 data:data,
-                success: function(){
+                dataType: "json",
+                success: function(data){
                     Swal.fire({
                         icon: 'success',
                         title: 'Success add company',
                     })
-                    ClearInputs()
-                    AddCompany(data)
+                    companys = data.companyList;
+                    UpdateAddForms()
                 },
                 error : function(){
                         Swal.fire({
@@ -150,6 +162,7 @@
             });
         }
     });
+
     function search(Key, myArray){
         for(var obj in myArray){
             if(obj == Key){
@@ -160,13 +173,9 @@
     }
     
     $('#SelectId').on('change', function() {
-            result = $('#SelectId :selected').text();
+        result = $('#SelectId :selected').text();
 
-                //console.log(companys)
-                //console.log(result)
-        obj = search(result,companys)
-
-        console.log(obj)
+        obj = search(result,companys);
 
         $('#CCompanyName').val(obj.companyName);
         $('#CTelephone').val(obj.telephone);
