@@ -1,14 +1,173 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using Confectionery.ViewModels
+@model StaffControlViewModel
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
 </head>
-<body>
-    <div class="row">
-        <div ng-></div>
+<body class="AdminPanel p-0 mb-5">
+    <div class="card mt-5" style="border-radius: 15px;">
+        <div class="card-body p-4">
+            <div class="d-flex text-black">
+                <div class="flex-shrink-0 row col-1">
+                <img src="https://cdn2.iconfinder.com/data/icons/social-media-flat-line/70/user-1024.png"
+                    alt="Generic placeholder image" class="img-fluid row col-12 m-0 p-0"
+                    style="width: 100px; border-radius: 10px;">
+                <a type="submit" asp-controller="User" asp-action="LogOut" class="btn col-12 text-center btn-outline-danger mt-3 p-0" style="width: 100px">Log out</a>
+                </div>
+                <div class="ms-5 mt-3 col-3 col-lg-2">
+                    <h5 class="mb-1 mt-3">Name: @Model.User.Name</h5>
+                    <p class="mb-2 pb-1 mt-3">Email: @Model.User.Email</p>
+                </div>
+                <div class="col-2 mt-3">
+                    <h5 class="mb-1 mt-3">Status: Admin</h5>
+                </div>
+                <a></a>
+                <a></a>
+                <a></a>
+            </div>
+        </div>
     </div>
+    <form id="FInfoAddCompany" class="row d-md-flex mt-4">
+        <div class="col-2">
+            <label asp-for="NewStaff.StaffName" class="form-label"></label>
+            <input type="text" asp-for="NewStaff.StaffName" placeholder="Staff name" class="form-control">
+            <span asp-validation-for="NewStaff.StaffName" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.DateDeliver" class="form-label"></label>
+            <input type="date" placeholder="Date deliver" asp-for="NewStaff.DateDeliver" class="form-control">
+            <span asp-validation-for="NewStaff.DateDeliver" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Weight" class="form-label"></label>
+            <input type="number" placeholder="Weight" asp-for="NewStaff.Weight" class="form-control">
+            <span asp-validation-for="NewStaff.Weight" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Price" class="form-label"></label>
+            <input type="number" placeholder="Staff price" asp-for="NewStaff.Price" class="form-control">
+            <span asp-validation-for="NewStaff.Price" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Calories" class="form-label"></label>
+            <input type="number" placeholder="Calories" asp-for="NewStaff.Calories" class="form-control">
+            <span asp-validation-for="NewStaff.Calories" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Classification" class="form-label"></label>
+            <input type="text" placeholder="Classification" asp-for="NewStaff.Classification" class="form-control">
+            <span asp-validation-for="NewStaff.Classification" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.CompanyId" class="form-label"></label>
+            <select id="SelectCompqnyId1" asp-for="NewStaff.CompanyId" class="col-3 form-control">
+                @foreach (var Staff in Model.Staffs)
+                {    
+                    <option value="@Staff.CompanyId">@Staff.CompanyId</option>
+                }
+            </select>
+            <span asp-validation-for="NewStaff.CompanyId" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Image" class="form-label"></label>
+            <input type="image"  asp-for="NewStaff.Image" class="form-control">
+            <span asp-validation-for="NewStaff.Image" class="text-danger"></span>
+        </div>
+        <div class="col-2 d-flex align-items-end">
+            <button type="submit" asp-controller="Admin" asp-action="AddStaff" class="btn container btn-success">Add Compnay</button>
+        </div>
+    </form>
+    <form class="row d-md-flex mt-5">
+        <div class="col-2">
+            <label asp-for="NewStaff.StaffId" class="form-label"></label>
+            <select id="SelectStaffId" asp-for="NewStaff.StaffId" class="col-3 form-control">
+                @foreach (var Staff in Model.Staffs)
+                {    
+                        <option value="@Staff.StaffId">@Staff.StaffId</option>
+                }
+            </select>
+            <span asp-validation-for="NewStaff.StaffId" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.StaffName" class="form-label"></label>
+            <input type="text" asp-for="NewStaff.StaffName" placeholder="Staff name" class="form-control">
+            <span asp-validation-for="NewStaff.StaffName" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.DateDeliver" class="form-label"></label>
+            <input type="date" placeholder="Date deliver" asp-for="NewStaff.DateDeliver" class="form-control">
+            <span asp-validation-for="NewStaff.DateDeliver" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Weight" class="form-label"></label>
+            <input type="number" placeholder="Weight" asp-for="NewStaff.Weight" class="form-control">
+            <span asp-validation-for="NewStaff.Weight" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Price" class="form-label"></label>
+            <input type="number" placeholder="Staff price" asp-for="NewStaff.Price" class="form-control">
+            <span asp-validation-for="NewStaff.Price" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Calories" class="form-label"></label>
+            <input type="number" placeholder="Calories" asp-for="NewStaff.Calories" class="form-control">
+            <span asp-validation-for="NewStaff.Calories" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Classification" class="form-label"></label>
+            <input type="text" placeholder="Classification" asp-for="NewStaff.Classification" class="form-control">
+            <span asp-validation-for="NewStaff.Classification" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.CompanyId" class="form-label"></label>
+            <select id="SelectCompqnyId1" asp-for="NewStaff.CompanyId" class="col-3 form-control">
+                    @foreach (var Staff in Model.Staffs)
+                    {    
+                        <option value="@Staff.CompanyId">@Staff.CompanyId</option>
+                    }
+            </select>
+            <span asp-validation-for="NewStaff.CompanyId" class="text-danger"></span>
+        </div>
+        <div class="col-2">
+            <label asp-for="NewStaff.Image" class="form-label"></label>
+            <input type="image"  asp-for="NewStaff.Image" class="form-control">
+            <span asp-validation-for="NewStaff.Image" class="text-danger"></span>
+        </div>
+        <div class="col-2 m-0 p-0  d-flex align-items-end">
+            <button type="submit" asp-action="ChangeCompany" asp-controller="Admin" class="btn btn-primary">Change company</button>
+        </div>
+    </form>
+    <table id="TableCompany" class="table mt-5">
+        <thead>
+            <tr>
+                <th scope="col">Staff id</th>
+                <th scope="col">Staff name</th>
+                <th scope="col">Date deliver</th>
+                <th scope="col">Weight</th>
+                <th scope="col">Calories</th>
+                <th scope="col">Classification</th>
+                <th scope="col">CompanyId</th>
+                <th scope="col">Image</th>
+                <th scope="col">Button delete</th>
+            </tr>
+        </thead>
+        <tbody id="Etriers">
+            @foreach (var staff in Model.Staffs)
+            {
+                <tr id=TR"@staff.CompanyId">
+                    <td>@staff.StaffId</td>
+                    <td>@staff.StaffName</td>
+                    <td>@staff.DateDeliver</td>
+                    <td>@staff.Weight</td>
+                    <td>@staff.Calories</td>
+                    <td>@staff.Classification</td>
+                    <td>@staff.CompanyId</td>
+                    <td>@staff.Image</td>
+                    <td><a type="submit" class="btn btn-outline-danger col-2" asp-route-IdDeleteStaff="@staff.StaffId" asp-controller="Admin" asp-action="DeleteStaff">Delete</a></td>
+                </tr>        
+            }
+        </tbody>
+    </table>
 </body>
 </html>

@@ -2,13 +2,13 @@
 
 namespace Confectionery.ViewModels
 {
-    public class UserAccountView 
+    public class AccountViewModel 
     {
         public string Email { get; set; }
         public string Name { get; set; }
         public float Total { get; set; }
 
-        public UserAccountView(string email, string name, float total)
+        public AccountViewModel(string email, string name, float total)
         {
             Email = email;
             Name = name;
@@ -45,10 +45,10 @@ namespace Confectionery.ViewModels
     }
     public class UserViewModel
     {
-        public UserAccountView AccountView { get; set; }
+        public AccountViewModel AccountView { get; set; }
         public List<OrderView> Orders { get; set; }
 
-        public UserViewModel(UserAccountView accountView, List<OrderView> orders)
+        public UserViewModel(AccountViewModel accountView, List<OrderView> orders)
         {
             AccountView = accountView;
             Orders = orders;

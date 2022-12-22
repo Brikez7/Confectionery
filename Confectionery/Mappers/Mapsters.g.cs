@@ -27,7 +27,7 @@ namespace Confectionery.Mapers
         }
         public FStaffViewModel MapToFullViewStaff(SweetStaff x)
         {
-            return new FStaffViewModel((int)x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.Company.CompanyName);
+            return new FStaffViewModel((int)x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.Company == null ? "Undefind company" : x.Company.CompanyName);
         }
         public BascetViewModel MapToViewBascet(DescriptionOrder x)
         {
@@ -39,7 +39,7 @@ namespace Confectionery.Mapers
         }
         public UserViewModel MapToViewUserAccount(User x)
         {
-            return new UserViewModel(new UserAccountView(x.EmailUser, x.NameUser, x.TotalSpent), x.Orders != null ? x.Orders.Select<Order, OrderView>(funcMain3).ToList<OrderView>() : new List<OrderView>());
+            return new UserViewModel(new AccountViewModel(x.EmailUser, x.NameUser, x.TotalSpent), x.Orders != null ? x.Orders.Select<Order, OrderView>(funcMain3).ToList<OrderView>() : new List<OrderView>());
         }
         public List<CompanyViewModel> MapToViewCompanies(List<Company> p5)
         {
@@ -88,6 +88,10 @@ namespace Confectionery.Mapers
         public SweetStaff MapToSweetStaffs(SweetStaffViewModel x)
         {
             return new SweetStaff(x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.CompanyId);
+        }
+        public AccountViewModel MapToUserAccountView(User x)
+        {
+            return new AccountViewModel(x.EmailUser, x.NameUser, x.TotalSpent);
         }
         
         private SStaffViewModel funcMain1(SweetStaff p2)

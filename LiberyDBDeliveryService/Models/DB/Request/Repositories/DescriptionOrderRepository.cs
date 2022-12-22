@@ -10,11 +10,11 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
     public class DescriptionOrderRepository : AbstractRepository, IRepositiry<DescriptionOrder>
     {
         public const string table_name = "description_order";
-        private const string _orderId = "@order_id";
-        private const string _staff_id = "@staff_id";
-        private const string _amount = "@amount";
-        private const string description_id = "@description_id";
-        private const string _user_id = "@user_id";
+        public const string order_id = "order_id";
+        public const string staff_id = "staff_id";
+        public const string amount = "amount";
+        public const string description_id = "description_id";
+        public const string user_id = "user_id";
         public DescriptionOrderRepository(IDapperConnectionProvider connectiomProvider) : base(connectiomProvider)
         {
         }
@@ -22,17 +22,17 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task AddAsync(DescriptionOrder record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<DescriptionOrder>($"INSERT INTO {table_name}(user_id, staff_id, amount) VALUES({_user_id},{_staff_id},{_amount});", new { user_id = record.UserId, staff_id = record.StaffId, amount = record.AmountSweetStaff });
+            await conn.QueryAsync<DescriptionOrder>($"INSERT INTO {table_name}({user_id}, {staff_id}, {amount}) VALUES(@{user_id},@{staff_id},@{amount});", new { user_id = record.UserId, staff_id = record.StaffId, amount = record.AmountSweetStaff });
             return;
         }
 
         public async Task<IEnumerable<DescriptionOrder>> GetBascket(int id_user)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            string sql = $"SELECT * FROM {table_name} LEFT JOIN {SweetStaffRepository.table_name} ON {table_name}.staff_id = {SweetStaffRepository.table_name}.staff_id WHERE {table_name}.user_id = {UserRepository._id} and {table_name}.order_id is null;";
+            string sql = $"SELECT * FROM {table_name} LEFT JOIN {SweetStaffRepository.table_name} ON {table_name}.{staff_id} = {SweetStaffRepository.table_name}.{staff_id} WHERE {table_name}.{user_id} = @{UserRepository.user_id} and {table_name}.{order_id} is null;";
 
 
-            return await conn.QueryAsync< DescriptionOrder,SweetStaff,DescriptionOrder > (
+            return await conn.QueryAsync<DescriptionOrder, SweetStaff, DescriptionOrder>(
                         sql,
                         (desc, staff) =>
                         {
@@ -40,23 +40,13 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
                             return desc;
                         },
                         splitOn: "staff_id",
-                        param: new { id = id_user });
-        }
-        public async Task AddRangeAsync(List<DescriptionOrder> values)
-        {
-/*            await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            StringBuilder stringQuery = new ($"INSERT INTO {table_name}(\"orderId\", \"staffId\", amount) VALUES ");
-            foreach (var record in values)
-                stringQuery.Append($"({record.Orderid},{record.StaffId},{record.AmountSweetStaff}),");
-            stringQuery.Replace(',', ';', stringQuery.Length - 1, 1);
-            await conn.QueryAsync<DescriptionOrder>(stringQuery.ToString());*/
-            return;
+                        param: new { user_id = id_user });
         }
 
         public async Task<DescriptionOrder> GetAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            return await conn.QuerySingleAsync<DescriptionOrder>($"SELECT * FROM {table_name} WHERE \"descriptionId\" = {id};");
+            return await conn.QuerySingleAsync<DescriptionOrder>($"SELECT * FROM {table_name} WHERE {description_id} = @{description_id};", new {description_id = id });
         }
 
         public async Task<IEnumerable<DescriptionOrder>> GetAllAsync()
@@ -68,27 +58,14 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task UpdateAsync(int id, DescriptionOrder record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<DescriptionOrder>($"UPDATE {table_name} SET \"orderId\"={record.Orderid}, \"staffId\"={record.StaffId}, amount={record.AmountSweetStaff} WHERE \"descriptionId\" = {id};");
+            await conn.QueryAsync<DescriptionOrder>($"UPDATE {table_name} SET {order_id} = @{order_id}, {staff_id} = @{staff_id}, {amount} = @{amount} WHERE {description_id} = @{description_id};", new { order_id = record.Orderid, staff_id = record.StaffId, amount = record.AmountSweetStaff, description_id = id, });
             return;
         }
 
         public async Task DeleteAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<DescriptionOrder>($"DELETE FROM {table_name} WHERE description_id = {description_id}",new { description_id = id });
-            return;
-        }
-
-        public async Task DeleteListAsync(int[] ids)
-        {
-/*            if (ids.Length == 0)
-                return;
-
-            await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            StringBuilder stringQuery = new StringBuilder($"DELETE FROM {table_name} WHERE \"descriptionId\" = {ids[0]}");
-            foreach (var item in ids.Skip(1))
-                stringQuery.Append($"or \"descriptionId\" = {item}");
-            stringQuery.Append(';');*/
+            await conn.QueryAsync<DescriptionOrder>($"DELETE FROM {table_name} WHERE {description_id} = @{description_id}",new { description_id = id });
             return;
         }
     }

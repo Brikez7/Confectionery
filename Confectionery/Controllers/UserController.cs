@@ -163,7 +163,6 @@ namespace Confectionery.Controllers
             }
         }
         [HttpGet]
-        [TypeFilter(typeof(FilterAutorisation))]
         public async Task<IActionResult> LogOut() 
         {
             await HttpContext.SignOutAsync();

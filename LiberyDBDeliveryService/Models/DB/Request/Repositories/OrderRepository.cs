@@ -10,8 +10,11 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
     public class OrderRepository : AbstractRepository,IRepositiry<Order>
     {
         public const string table_name = "orders";
-        public const string user_id = "@user_id";
-        public const string status_order = "@status_order";
+        public const string user_id = "user_id";
+        public const string status_order = "status_order";
+        public const string order_id = "order_id";
+        public const string order_date = "order_date";
+        public const string total = "total";
         public OrderRepository(IDapperConnectionProvider connectiomProvider) : base(connectiomProvider)
         {
         }
@@ -19,18 +22,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task AddAsync(Order order)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Order>($"INSERT INTO {table_name} (user_id,status_order) VALUES ({user_id},{status_order});",new {user_id = order.UserId, status_order = (short)order.StatusOrder});
-            return;
-        }
-
-        public async Task AddRangeAsync(List<Order> values)
-        {
-/*          await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            StringBuilder stringQuery = new StringBuilder($"INSERT INTO {table_name} (\"userId\", \"orderDate\", total) VALUES ");
-            foreach (var record in values)
-                stringQuery.Append($"({record.UserId},{record.DateOrder},{record.Total}),");
-            stringQuery.Replace(',', ';', stringQuery.Length - 1, 1);
-            await conn.QueryAsync<Order>(stringQuery.ToString());*/
+            await conn.QueryAsync<Order>($"INSERT INTO {table_name} ({user_id},{status_order}) VALUES (@{user_id},@{status_order});",new {user_id = order.UserId, status_order = (short)order.StatusOrder});
             return;
         }
 
@@ -38,7 +30,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task<Order> GetAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            return await conn.QuerySingleAsync<Order>($"SELECT * FROM {table_name} WHERE \"orderId\" = {id};");
+            return await conn.QuerySingleAsync<Order>($"SELECT * FROM {table_name} WHERE {order_id} = @{order_id};", new { order_id = id });
         }
 
         public async Task<IEnumerable<Order>> GetAllAsync()
@@ -50,28 +42,14 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task UpdateAsync(int id, Order record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Order>($"UPDATE FROM {table_name} SET \"userId\" ={record.UserId}, \"orderDate\" ={record.DateOrder}, total ={record.Total} WHERE \"orderId\" = {id};");
+            await conn.QueryAsync<Order>($"UPDATE FROM {table_name} SET {user_id} = @{user_id}, {order_date} = @{order_date}, {total} = @{total} WHERE {order_id} = @{order_id};", new { user_id = record.UserId, status_order = (short)record.StatusOrder,  order_id = id});
             return;
         }
 
         public async Task DeleteAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Order>($"DELETE FROM {table_name} WHERE \"orderId\" = {id};");
-            return;
-        }
-
-        public async Task DeleteListAsync(int[] ids)
-        {
-/*            if (ids.Length == 0)
-                return;
-
-            await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            StringBuilder stringQuery = new StringBuilder($"DELETE FROM {table_name} WHERE \"orderId\" = {ids[0]}");
-            foreach (int id in ids.Skip(1))
-                stringQuery.Append($"or \"orderId\" = {id}");
-            stringQuery.Append(';');
-            await conn.QueryAsync<Order>(stringQuery.ToString());*/
+            await conn.QueryAsync<Order>($"DELETE FROM {table_name} WHERE {order_id} = @{order_id};", new {order_id = id });
             return;
         }
     }

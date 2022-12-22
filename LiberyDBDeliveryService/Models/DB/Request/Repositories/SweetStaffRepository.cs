@@ -3,23 +3,20 @@ using LibraryDatabaseCoffe.Models.DB.Context.@interface;
 using LibraryDatabaseCoffe.Models.DB.Repository;
 using LibraryDatabaseCoffe.Models.DB.Request.AbstractRepositorys;
 using LibraryDatabaseCoffe.Models.DB.Tables;
-using System.Drawing;
-using System.Text;
 
 namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
 {
     public class SweetStaffRepository : AbstractRepository,IRepositiry<SweetStaff>
     {
         public const string table_name = "sweet_staff";
-
-        private const string _staffName = "@StaffName";
-        private const string _dateDeliver = "@DateDeliver";
-        private const string _companyId = "@Company";
-        private const string _weight = "@Weight";
-        private const string _classification = "@Classification";
-        private const string _price = "@Price";
-        private const string _calories = "@Calories";
-        private const string _id = "@id";
+        public const string staff_name = "staff_name";
+        public const string date_receipt = "date_receipt";
+        public const string company_id = "company_id";
+        public const string weight = "weight";
+        public const string classification = "classification";
+        public const string price = "price";
+        public const string calories = "calories";
+        public const string staff_id = "staff_id";
         public SweetStaffRepository(IDapperConnectionProvider connectiomProvider) : base(connectiomProvider)
         {
         }
@@ -27,51 +24,26 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task AddAsync(SweetStaff record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<SweetStaff>($"INSERT INTO {table_name} (staff_name, date_receipt, company_id, weight, classification, price, calories) VALUES ({_staffName}, {_dateDeliver}, {_companyId}, {_weight}, {_classification}, {_price}, {_calories});",new {record.StaffName,record.DateDeliver,record.Company,record.Weight,record.Classification,record.Price,record.Calories });
-            return;
-        }
-
-        public async Task AddRangeAsync(List<SweetStaff> items)
-        {
-/*            await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            StringBuilder stringQuery = new StringBuilder($"INSERT INTO {table_name}(\"staffName\", \"dateReceipt\", \"companyId\", weight, classification, price, calories) VALUES ");
-            foreach (SweetStaff record in items)
-                stringQuery.Append($"({record.StaffName}, {_dateDeliver}, {_company}, {_weight}, {_classification}, {_price}, {_calories}),");
-            stringQuery.Replace(',',';',stringQuery.Length-1,1);
-            await conn.QueryAsync<SweetStaff>(stringQuery.ToString());*/
+            await conn.QueryAsync<SweetStaff>($"INSERT INTO {table_name} ({staff_name}, {date_receipt}, {company_id}, {weight}, {classification}, {price}, {calories}) VALUES (@{staff_name}, @{date_receipt}, @{company_id}, @{weight}, @{classification}, @{price}, @{calories});",new { staff_name = record.StaffName, date_receipt = record.DateDeliver, company_id = record.Company, weight = record.Weight, classification = record.Classification, price = record.Price, calories = record.Calories });
             return;
         }
 
         public async Task DeleteAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<SweetStaff>($"DELETE FROM {table_name} WHERE staff_id = {_id};",new {id});
-            return;
-        }
-
-        public async Task DeleteListAsync(int[] ids)
-        {
-/*            if (ids.Length == 0)
-                return;
-
-            await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            StringBuilder stringQuery = new StringBuilder($"DELETE FROM {table_name} WHERE \"staffId\" = {ids[0]}");
-            foreach (int id in ids.Skip(1))
-                stringQuery.Append($" or \"staffId\" = {id}");
-            stringQuery.Append(';');
-            await conn.QueryAsync<SweetStaff>(stringQuery.ToString());*/
+            await conn.QueryAsync<SweetStaff>($"DELETE FROM {table_name} WHERE {staff_id} = @{staff_id};",new { staff_id = id});
             return;
         }
 
         public async Task<SweetStaff> GetAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            return await conn.QuerySingleAsync<SweetStaff>($"SELECT * FROM {table_name} WHERE staff_id = {_id};", new { id });
+            return await conn.QuerySingleAsync<SweetStaff>($"SELECT * FROM {table_name} WHERE {staff_id} = @{staff_id};", new { staff_id = id });
         }
         public async Task<IEnumerable<SweetStaff>> GetFullAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            string sql = $"SELECT * FROM {table_name} LEFT JOIN {CompanyRepository.table_name} ON {table_name}.company_id = {CompanyRepository.table_name}.company_id WHERE {table_name}.staff_id = {_id} LIMIT 1;";
+            string sql = $"SELECT * FROM {table_name} LEFT JOIN {CompanyRepository.table_name} ON {table_name}.{company_id} = {CompanyRepository.table_name}.{company_id} WHERE {table_name}.{staff_id} = @{staff_id} LIMIT 1;";
 
 
             return await conn.QueryAsync<SweetStaff, Company, SweetStaff >(
@@ -81,8 +53,8 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
                             staff.Company = company;
                             return staff;
                         },
-                        splitOn: "company_id",
-                        param: new { id = id});
+                        splitOn: company_id,
+                        param: new { staff_id = id});
         }
         public async Task<IEnumerable<SweetStaff>> GetAllAsync()
         {
@@ -93,7 +65,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task UpdateAsync(int id, SweetStaff record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<SweetStaff>($"UPDATE {table_name} SET staff_name = {_staffName}, date_receipt = {_dateDeliver}, company_id = {_companyId}, weight = {_weight}, classification = {_classification}, price = {_price}, calories = {_calories} WHERE staff_id = {_id};",new { record.StaffName, record.DateDeliver, record.Company, record.Weight, record.Classification, record.Price, record.Calories , id});
+            await conn.QueryAsync<SweetStaff>($"UPDATE {table_name} SET {staff_name} = @{staff_name}, {date_receipt} = @{date_receipt}, {company_id} = @{company_id}, {weight} = @{weight}, {classification} = @{classification}, {price} = @{price}, {calories} = @{calories} WHERE {staff_id} = @{staff_id};",new { staff_name = record.StaffName, date_receipt = record.DateDeliver, company_id = record.Company, weight = record.Weight, classification = record.Classification, price = record.Price, calories = record.Calories, staff_id = id });
             return;
         }
     }

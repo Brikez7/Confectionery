@@ -6,14 +6,16 @@ namespace Confectionery.ViewModels
     {
         public CompanyViewModel? NewCompany { get; set; }
         public List<CompanyViewModel> CompanyList { get; set; } = new List<CompanyViewModel>();
-
-        public CompanyControlViewModel(List<CompanyViewModel> companyList)
-        {
-            CompanyList = companyList;
-        }
+        public AccountViewModel? User { get; set; }
 
         public CompanyControlViewModel()
         {
+        }
+
+        public CompanyControlViewModel(List<CompanyViewModel> companyList, AccountViewModel user)
+        {
+            CompanyList = companyList;
+            User = user;
         }
     }
 }

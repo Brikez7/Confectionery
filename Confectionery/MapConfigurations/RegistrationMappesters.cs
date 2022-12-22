@@ -22,7 +22,7 @@ namespace Confectionery.Mappers
                   .RequireDestinationMemberSource(true);
 
             config.NewConfig<SweetStaff, FStaffViewModel>()
-                  .MapWith(x => new FStaffViewModel((int)x.StaffId,x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.Company.CompanyName))
+                  .MapWith(x => new FStaffViewModel((int)x.StaffId,x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.Company == null ? "Undefind company" :  x.Company.CompanyName ))
                   .RequireDestinationMemberSource(true);
 
             config.NewConfig<DescriptionOrder, BascetViewModel>()
@@ -32,7 +32,7 @@ namespace Confectionery.Mappers
             config.NewConfig<User, UserViewModel>()
                   .IgnoreNullValues(true)
                   .IgnoreIf((x,d) => x.Orders.Count == 0,x => x.Orders)
-                  .MapWith(x => new UserViewModel(new UserAccountView(x.EmailUser, x.NameUser, x.TotalSpent),
+                  .MapWith(x => new UserViewModel(new AccountViewModel(x.EmailUser, x.NameUser, x.TotalSpent),
                                                   x.Orders != null ?
                                                       x.Orders.Select(x => new OrderView(x.OrderId ?? -1, x.DateOrder, x.Total, x.StatusOrder, 
                                                       x.DescriptionOrders != null ?
@@ -40,6 +40,7 @@ namespace Confectionery.Mappers
                                                       :new Dictionary<string, short>())).ToList() 
                                                   : new List<OrderView>()))
                   .RequireDestinationMemberSource(true);
+
             config.NewConfig<Company, CompanyViewModel>()
                   .MapWith(x => new CompanyViewModel(x.CompanyId, x.CompanyName, x.Owner, x.Telephone, x.BankingAccount))
                   .RequireDestinationMemberSource(true);
@@ -54,6 +55,10 @@ namespace Confectionery.Mappers
 
             config.NewConfig<SweetStaff, SweetStaffViewModel > ()
                   .MapWith(x => new SweetStaffViewModel(x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification,x.CompanyId))
+                  .RequireDestinationMemberSource(true);
+
+            config.NewConfig<User, AccountViewModel>()
+                  .MapWith(x => new AccountViewModel(x.EmailUser,x.NameUser,x.TotalSpent))
                   .RequireDestinationMemberSource(true);
         }   
     }

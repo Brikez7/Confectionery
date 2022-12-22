@@ -6,6 +6,25 @@
   <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
 </head>
 <body class="AdminPanel p-0 mb-5">
+    <div class="card mt-5" style="border-radius: 15px;">
+        <div class="card-body p-4">
+            <div class="d-flex text-black">
+                <div class="flex-shrink-0 row col-1">
+                <img src="https://cdn2.iconfinder.com/data/icons/social-media-flat-line/70/user-1024.png"
+                    alt="Generic placeholder image" class="img-fluid row col-12 m-0 p-0"
+                    style="width: 100px; border-radius: 10px;">
+                <a type="submit" asp-controller="User" asp-action="LogOut" class="btn col-12 text-center btn-outline-danger mt-3 p-0" style="width: 100px">Log out</a>
+                </div>
+                <div class="ms-5 mt-3 col-3 col-lg-2">
+                    <h5 class="mb-1 mt-3">Name: @Model.User.Name</h5>
+                    <p class="mb-2 pb-1 mt-3">Email: @Model.User.Email</p>
+                </div>
+                <div class="col-2 mt-3">
+                    <h5 class="mb-1 mt-3">Status: Admin</h5>
+                </div>
+            </div>
+        </div>
+    </div>
     <form id="FInfoAddCompany" class="row d-md-flex mt-4">
         <div class="col-2">
             <label asp-for="NewCompany.CompanyName" class="form-label"></label>
