@@ -19,7 +19,10 @@ namespace Confectionery.Mapers
         public List<CompanyViewModel> MapToViewCompanies(List<Company> company);
         public Company MapToCompany(CompanyViewModel companyView);
         public List<SweetStaffViewModel> MapToViewSweetStaffs(List<SweetStaff> company);
-        public SweetStaff MapToSweetStaffs(SweetStaffViewModel companyView);
+        public SweetStaff MapToSweetStaff(SweetStaffViewModel companyView);
         public AccountViewModel MapToUserAccountView(User user);
+        public List<OrderViewModel> MapToOrdersView(List<Order> orders);
+        public OrderViewModel MapToOrderView(Order order);
+        public Order MapToOrder(OrderViewModel order);
     }
 }

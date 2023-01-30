@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-using System.Xml.Linq;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Confectionery.ViewModels
 {
     public class SweetStaffViewModel
     {
-
         public int? StaffId { get; set; }
         [Display(Name = "Название десерта")]
         [Required(ErrorMessage = "Вы не заполнили поле название десерта")]
@@ -14,10 +12,9 @@ namespace Confectionery.ViewModels
         public string StaffName { get; set; }
 
         [Display(Name = "Дата поступления десерта")]
-        [Required(ErrorMessage = "Вы не заполнили дату поступления десерта")]
         public DateTime DateDeliver { get; set; } = DateTime.Now;
         [Display(Name = "Вес десерта")]
-        [Required(ErrorMessage = "Вы не заполнили дату поступления десерта")]
+        [Required(ErrorMessage = "Вы не заполнили вес десерта")]
         [Range(0,1000000, ErrorMessage = "Вы ввели некорректный вес(от 0 до 1.000.000)")]
         public float Weight { get; set; }
         [Display(Name = "Цена десерта")]
@@ -34,9 +31,14 @@ namespace Confectionery.ViewModels
         public string Classification { get; set; }
         [Display(Name = "Id привязанной компании")]
         public int? CompanyId { get; set; }
-        public Bitmap? Image { get; set; } 
+        [Display (Name = "Выберите изображение")]
+        public IFormFile? Image { get; set; }
 
-        public SweetStaffViewModel(int? staffId, string staffName, DateTime dateDeliver, float weight, float price, float calories, string classification, int? companyId)
+        public SweetStaffViewModel()
+        {
+        }
+
+        public SweetStaffViewModel(int? staffId, string staffName, DateTime dateDeliver, float weight, float price, float calories, string classification)
         {
             StaffId = staffId;
             StaffName = staffName;
@@ -45,7 +47,16 @@ namespace Confectionery.ViewModels
             Price = price;
             Calories = calories;
             Classification = classification;
+        }
+
+        public SweetStaffViewModel(int? staffId, string staffName, DateTime dateDeliver, float weight, float price, float calories, string classification, int? companyId) : this(staffId, staffName, dateDeliver, weight, price, calories, classification)
+        {
             CompanyId = companyId;
+        }
+
+        public SweetStaffViewModel(int? staffId, string staffName, DateTime dateDeliver, float weight, float price, float calories, string classification, int? companyId, IFormFile image) : this(staffId, staffName, dateDeliver, weight, price, calories, classification, companyId)
+        {
+            Image = image;
         }
     }
 }

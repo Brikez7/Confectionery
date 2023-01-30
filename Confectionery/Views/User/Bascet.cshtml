@@ -24,7 +24,14 @@
             <div class="row d-flex justify-content-between align-items-center">
               <div class="col-md-2 col-lg-2 col-xl-2">
                 <img
-                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-shopping-carts/img1.webp"
+                  src='@{
+                    string path = Directory.GetCurrentDirectory() + "\\wwwroot\\imgs\\Staffs\\"+ descorder.StaffName + ".png";
+                    var checkFile = File.Exists(path);
+                    if(checkFile)
+                        Write(Url.Content("~/imgs/Staffs/"+ descorder.StaffName + ".png"));
+                    else 
+                        Write(Url.Content("https://avatars.mds.yandex.net/i?id=d0d7d19e39a3c782c1adde3ec4e3a30160ea1945-5097070-images-thumbs&n=13"));
+                }'
                   class="img-fluid rounded-3" alt="Cotton T-shirt">
               </div>
               <div class="col-md-3 col-lg-3 col-xl-3">
@@ -54,7 +61,7 @@
         }
         <div class="card">
           <div class="card-body row text-center d-flex">
-            <button id="ButtonOrder"  type="submit" class="btn btn-warning btn-block btn-lg text-white col-12 col-md-3 col-lg-2 m-auto">Заказать</button>
+            <button id="ButtonOrder" type="submit" class="btn btn-warning btn-block btn-lg text-white col-12 col-md-3 col-lg-2 m-auto">Заказать</button>
             <h5 id='sum_cost'class="col-12 col-md-9 col-lg-10 m-auto mt-2">Общая сумма заказа @Math.Round(Model.Sum(x => x.Price * x.AmountSweetStaff),2) рб</h5>
           </div>
         </div>

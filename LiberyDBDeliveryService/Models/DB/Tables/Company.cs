@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace LibraryDatabaseCoffe.Models.DB.Tables
+﻿namespace LibraryDatabaseCoffe.Models.DB.Tables
 {
     public class Company
     {

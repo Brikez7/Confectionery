@@ -29,8 +29,6 @@
             UserId = userId;
             StatusOrder = statusOrder;
         }
-        //(System.Int32 order_id, System.Int32 user_id, System.DateTime order_date, System.Single total, System.Int16 status_order)
-
         public User? User { get; set; }
         public List<DescriptionOrder> DescriptionOrders { get; set; } = new List<DescriptionOrder>();
     }

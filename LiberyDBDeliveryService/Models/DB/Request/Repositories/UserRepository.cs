@@ -25,10 +25,10 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
             await conn.QueryAsync<User>($"INSERT INTO {table_name} ( {user_name} , {email}, {password}, {status}, {total}) VALUES (@{user_name}, @{email}, @{password}, @{status}, @{total});",new { user_name = record.NameUser, email = record.EmailUser, password = record.Password, status = record.Status, total = record.TotalSpent });
             return;
         }
-        public async Task<bool> SearchUserByEmail(string pEmail) 
+        public async Task<bool> SearchUserByEmail(string iEmail) 
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            return await conn.QuerySingleAsync<bool>($"select exists (select true from {table_name} where {table_name}.{email} = @{email});",new { email = pEmail});
+            return await conn.QuerySingleAsync<bool>($"select exists (select true from {table_name} where {table_name}.{email} = @{email});",new { email = iEmail});
         }
         public async Task<bool> SearchUserByName(string name)
         {
@@ -49,7 +49,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
                                                     $"LEFT JOIN {SweetStaffRepository.table_name} ON {SweetStaffRepository.table_name}.{SweetStaffRepository.staff_id} = {DescriptionOrderRepository.table_name}.{DescriptionOrderRepository.staff_id} " +
                                                     $"WHERE {table_name}.{user_id} = @{user_id};";
 
-            User mainUser = null;
+            User? mainUser = null;
             List<Order> mainOrders = new List<Order>();
             List<DescriptionOrder> mainDescorders = new List<DescriptionOrder>();
             List<SweetStaff> mainStaffs = new List<SweetStaff>();

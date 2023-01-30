@@ -5,7 +5,15 @@
     <div class="row m-0 p-0">
         <div class="col-md-6 jumbotron vertical-center px-0 d-md-flex pe-3">
             <div class="container px-0 m-md-auto">
-                <img src="https://avatars.mds.yandex.net/i?id=d0d7d19e39a3c782c1adde3ec4e3a30160ea1945-5097070-images-thumbs&n=13" alt="Kodak Brownie Flash B Camera" class="image-responsive"/>
+                <img src='@{
+                    string path = Directory.GetCurrentDirectory() + "\\wwwroot\\imgs\\Staffs\\"+ Model.Staff.StaffName + ".png";
+                    var checkFile = File.Exists(path);
+                    if(checkFile)
+                        Write(Url.Content("~/imgs/Staffs/"+ Model.Staff.StaffName + ".png"));
+                    else 
+                        Write(Url.Content("https://avatars.mds.yandex.net/i?id=d0d7d19e39a3c782c1adde3ec4e3a30160ea1945-5097070-images-thumbs&n=13"));
+                }'  
+                alt="Kodak Brownie Flash B Camera" class="image-responsive"/>
             </div>
         </div>
         <div class="col-md-6 row mx-0 p-0 my-1">
@@ -48,7 +56,7 @@
             <div class="col-md-12 px-0 text-center">
                 <input type = "hidden" asp-for="Id" value="@Model.Staff.StaffId"/>
                 <button id="ButtonAdd" class="text-center btn px-5 w-50 h-75 mt-5 btn-outline-primary">
-                    Add
+                    Добавить в корзину
                 </button>
 
             </div>

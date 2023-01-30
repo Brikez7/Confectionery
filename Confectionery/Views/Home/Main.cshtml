@@ -97,7 +97,15 @@
             @foreach (var item in Model){
             <div class="px-1-sm" method="post">
                 <div class="card shadow-sm mx-4 my-sm-3">
-                    <img src="https://avatars.mds.yandex.net/i?id=1b2d704a6659481cd6a6f2f850be3d326323d45f-6946731-images-thumbs&n=13" class="w-100"  alt="...">
+                        <img  src='@{
+                            string path = Directory.GetCurrentDirectory() + "\\wwwroot\\imgs\\Staffs\\"+ item.StaffName + ".png";
+                            var checkFile = File.Exists(path);
+                            if(checkFile)
+                                Write(Url.Content("~/imgs/Staffs/"+ item.StaffName + ".png"));
+                            else 
+                                Write(Url.Content("https://avatars.mds.yandex.net/i?id=1b2d704a6659481cd6a6f2f850be3d326323d45f-6946731-images-thumbs&n=13"));
+                        }' 
+                         class="w-100"  alt="...">
                     <div class="card-body">
                         <ng-view class="card-text">Название: @item.StaffName</ng-view>
                         <p  class="card-text">Классификация: @item.Classification</p>

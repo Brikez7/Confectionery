@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace LibraryDatabaseCoffe.Models.DB.Tables
+﻿namespace LibraryDatabaseCoffe.Models.DB.Tables
 {
     public class SweetStaff
     {
@@ -12,6 +9,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
         public float Price { get; set; }
         public float Calories { get; set; }
         public string Classification { get; set; }
+        public int? CompanyId { get; set; }
         public SweetStaff(int? staff_id, string staff_name, DateTime date_receipt, float weight, float price, float calories, string classification,int? company_id)
         {
             StaffId = staff_id;
@@ -23,6 +21,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
             Classification = classification;
             CompanyId = company_id;
         }
+        public Company? Company { get; set; }
         public SweetStaff(int staff_id, string staff_name, DateTime date_receipt, int company_id, float weight, string classification, float price, float calories)
         {
             StaffId = staff_id;
@@ -34,7 +33,5 @@ namespace LibraryDatabaseCoffe.Models.DB.Tables
             Classification = classification;
             CompanyId = company_id;
         }
-        public int? CompanyId { get; set; }
-        public Company? Company { get; set; }
     }
 }

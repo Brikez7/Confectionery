@@ -1,9 +1,11 @@
 ﻿@using Confectionery.ViewModels
 @model StaffControlViewModel
+@inject IWebHostEnvironment HostingEnvironment
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" asp-append-version="true" />
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
 </head>
 <body class="AdminPanel p-0 mb-5">
     <div class="card mt-5" style="border-radius: 15px;">
@@ -22,13 +24,19 @@
                 <div class="col-2 mt-3">
                     <h5 class="mb-1 mt-3">Status: Admin</h5>
                 </div>
-                <a></a>
-                <a></a>
-                <a></a>
+                <div class="col-2 mt-3">
+                    <a class="h5 mb-1 mt-3 text-decoration-none text-black" type="submit" asp-action="PanelCompany" asp-controller="Admin">Компании</a>
+                </div>
+                <div class="col-2 mt-3">
+                    <a class="h5 mb-1 mt-3 text-decoration-none text-decoration-underline text-black" type="submit" asp-action="PanelSweetStaff" asp-controller="Admin">Десерты</a>
+                </div>
+                <div class="col-2 mt-3">
+                    <a class="h5 mb-1 mt-3 text-decoration-none text-black" type="submit" asp-action="PanelOrder" asp-controller="Admin">Заказы</a>
+                </div>
             </div>
         </div>
     </div>
-    <form id="FInfoAddCompany" class="row d-md-flex mt-4">
+    <form id="FInfoAddSweetStaff" method="post" class="row d-md-flex mt-4" enctype="multipart/form-data">
         <div class="col-2">
             <label asp-for="NewStaff.StaffName" class="form-label"></label>
             <input type="text" asp-for="NewStaff.StaffName" placeholder="Staff name" class="form-control">
@@ -62,26 +70,29 @@
         <div class="col-2">
             <label asp-for="NewStaff.CompanyId" class="form-label"></label>
             <select id="SelectCompqnyId1" asp-for="NewStaff.CompanyId" class="col-3 form-control">
-                @foreach (var Staff in Model.Staffs)
+                @foreach (var idCompany in Model.Companies)
                 {    
-                    <option value="@Staff.CompanyId">@Staff.CompanyId</option>
+                    <option value="@idCompany">@idCompany</option>
                 }
             </select>
             <span asp-validation-for="NewStaff.CompanyId" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.Image" class="form-label"></label>
-            <input type="image"  asp-for="NewStaff.Image" class="form-control">
+            <input type="file" accept="image/*" id="ImgAdd" asp-for="NewStaff.Image" class="form-control" placeholder="Выберите изображение">
             <span asp-validation-for="NewStaff.Image" class="text-danger"></span>
         </div>
+        <div id="LoadAddImg" class="col-2" hidden>
+            <img id="ImgAdding" src="#" alt="adding image"/>
+        </div>
         <div class="col-2 d-flex align-items-end">
-            <button type="submit" asp-controller="Admin" asp-action="AddStaff" class="btn container btn-success">Add Compnay</button>
+            <button id = "AddSweetStaff" type="submit" asp-controller="Admin" asp-action="AddSweetStaff" class="btn container btn-success">Добавить</button>
         </div>
     </form>
-    <form class="row d-md-flex mt-5">
+    <form id="FInfoChangeSweetStaff"  enctype="multipart/form-data" method="post" class="row d-md-flex mt-5">
         <div class="col-2">
             <label asp-for="NewStaff.StaffId" class="form-label"></label>
-            <select id="SelectStaffId" asp-for="NewStaff.StaffId" class="col-3 form-control">
+            <select id="CSelectStaffId" asp-for="NewStaff.StaffId" class="col-3 form-control">
                 @foreach (var Staff in Model.Staffs)
                 {    
                         <option value="@Staff.StaffId">@Staff.StaffId</option>
@@ -91,51 +102,55 @@
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.StaffName" class="form-label"></label>
-            <input type="text" asp-for="NewStaff.StaffName" placeholder="Staff name" class="form-control">
+            <input id="CStaffName" type="text" asp-for="NewStaff.StaffName" placeholder="Staff name" class="form-control">
             <span asp-validation-for="NewStaff.StaffName" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.DateDeliver" class="form-label"></label>
-            <input type="date" placeholder="Date deliver" asp-for="NewStaff.DateDeliver" class="form-control">
+            <input id="CDateDeliver" type="date" placeholder="Date deliver" asp-for="NewStaff.DateDeliver" class="form-control">
             <span asp-validation-for="NewStaff.DateDeliver" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.Weight" class="form-label"></label>
-            <input type="number" placeholder="Weight" asp-for="NewStaff.Weight" class="form-control">
+            <input id="CWeight" type="number" placeholder="Weight" asp-for="NewStaff.Weight" class="form-control">
             <span asp-validation-for="NewStaff.Weight" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.Price" class="form-label"></label>
-            <input type="number" placeholder="Staff price" asp-for="NewStaff.Price" class="form-control">
+            <input id="CPrice" type="number" placeholder="Staff price" asp-for="NewStaff.Price" class="form-control">
             <span asp-validation-for="NewStaff.Price" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.Calories" class="form-label"></label>
-            <input type="number" placeholder="Calories" asp-for="NewStaff.Calories" class="form-control">
+            <input id="CCalories" type="number" placeholder="Calories" asp-for="NewStaff.Calories" class="form-control">
             <span asp-validation-for="NewStaff.Calories" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.Classification" class="form-label"></label>
-            <input type="text" placeholder="Classification" asp-for="NewStaff.Classification" class="form-control">
+            <input id="CClassification" type="text" placeholder="Classification" asp-for="NewStaff.Classification" class="form-control">
             <span asp-validation-for="NewStaff.Classification" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.CompanyId" class="form-label"></label>
-            <select id="SelectCompqnyId1" asp-for="NewStaff.CompanyId" class="col-3 form-control">
-                    @foreach (var Staff in Model.Staffs)
-                    {    
-                        <option value="@Staff.CompanyId">@Staff.CompanyId</option>
-                    }
+            <select id="CSelectCompanyId" asp-for="NewStaff.CompanyId" class="col-3 form-control">
+                @foreach (var idCompany in Model.Companies)
+                {    
+                    <option value="@idCompany">@idCompany</option>
+                }
             </select>
             <span asp-validation-for="NewStaff.CompanyId" class="text-danger"></span>
         </div>
         <div class="col-2">
             <label asp-for="NewStaff.Image" class="form-label"></label>
-            <input type="image"  asp-for="NewStaff.Image" class="form-control">
+            <input type="file" accept="image/*" id="a" asp-for="NewStaff.Image" class="form-control">
             <span asp-validation-for="NewStaff.Image" class="text-danger"></span>
         </div>
+        <div id="LoadChangeImg" class="col-2" hidden>
+            <img id="ImgChangning" src="#" alt="adding image"/>
+        </div>
+
         <div class="col-2 m-0 p-0  d-flex align-items-end">
-            <button type="submit" asp-action="ChangeCompany" asp-controller="Admin" class="btn btn-primary">Change company</button>
+            <button id = "ChangeSweetStaff" type="submit" asp-action="ChangeSweetStaff" asp-controller="Admin" class="btn btn-primary">Изменить</button>
         </div>
     </form>
     <table id="TableCompany" class="table mt-5">
@@ -145,6 +160,7 @@
                 <th scope="col">Staff name</th>
                 <th scope="col">Date deliver</th>
                 <th scope="col">Weight</th>
+                <th scope="col">Price</th>
                 <th scope="col">Calories</th>
                 <th scope="col">Classification</th>
                 <th scope="col">CompanyId</th>
@@ -160,14 +176,108 @@
                     <td>@staff.StaffName</td>
                     <td>@staff.DateDeliver</td>
                     <td>@staff.Weight</td>
+                    <td>@staff.Price</td>
                     <td>@staff.Calories</td>
                     <td>@staff.Classification</td>
-                    <td>@staff.CompanyId</td>
-                    <td>@staff.Image</td>
-                    <td><a type="submit" class="btn btn-outline-danger col-2" asp-route-IdDeleteStaff="@staff.StaffId" asp-controller="Admin" asp-action="DeleteStaff">Delete</a></td>
+                    <td>
+                        @{
+                            if (staff.CompanyId == 0)
+                                Write("Неизвестно");
+                            else
+                                Write(staff.CompanyId);
+                        }
+                    </td>
+                        <td>
+                            <img src='@{
+                                string path = Directory.GetCurrentDirectory() + "\\wwwroot\\imgs\\Staffs\\"+ staff.StaffName + ".png";
+                                var checkFile = File.Exists(path);
+                                if(checkFile)
+                                    Write(Url.Content("~/imgs/Staffs/"+ staff.StaffName + ".png"));
+                                else 
+                                    Write(Url.Content("https://avatars.mds.yandex.net/i?id=1b2d704a6659481cd6a6f2f850be3d326323d45f-6946731-images-thumbs&n=13"));
+                            }' width="200" height="100">
+                        </td>
+                    <td><a id="Delete" type="submit" class="btn btn-outline-danger col-10" asp-route-IdDeleteStaff="@staff.StaffId" asp-controller="Admin" asp-action="DeleteSweetStaff">Удалить</a></td>
                 </tr>        
             }
         </tbody>
     </table>
 </body>
 </html>
+@section pageScripts
+{
+    <script>
+        let staffs = @Json.Serialize(Model.Staffs);
+
+        function search(Key, myArray){
+            for(var obj in myArray){
+                console.log(myArray[obj]);
+                if(myArray[obj].staffId == Key){
+                    console.log(myArray[obj]);
+                    return myArray[obj];
+                }
+            }
+        }
+        async function fetchImage(url){
+            console.log(url);
+            const data = await fetch(encodeURIComponent(url));
+            console.log(data);
+            const buffer = await data.arrayBuffer();
+            const blob = new Blob([buffer], { type: "image/png"});
+            return blob;
+        }
+        function ClearInput(){
+            $('#FInfoAddSweetStaff')[0].reset();
+            $('#FInfoChangeSweetStaff')[0].reset();
+        }
+        $('#Delete').on('click',function(e){
+            ClearInput();
+        });
+
+        $('#ImgAdd').on('change',function(e) {
+            const [file] = $('#ImgAdd').prop('files');
+            console.log(file)
+            if (file) {
+                $('#ImgAdding').attr('src',URL.createObjectURL(file));                     
+                $('#LoadAddImg').removeAttr('hidden');
+            }
+        });
+        $('#ImgChange').on('change',function(e) {
+            const [file] = $('#ImgChange').prop('files');
+            console.log(file)
+            if (file) {
+                $('#ImgChangning').attr('src',URL.createObjectURL(file));
+                $('#LoadChangeImg').removeAttr('hidden');
+            }
+        });
+
+        $('#CSelectStaffId').on('change', function() {
+            result = $('#CSelectStaffId :selected').text();
+
+            obj = search(result,staffs);
+            console.log(obj);
+            //let url = '/Staffs/';
+            //let nameFile = obj.staffName + '.png';
+            //let inputForm = document.getElementById('ImgChange');
+
+            //console.log(url + nameFile)
+
+            //const blob = fetchImage(url + nameFile);
+            //const file = new File([blob],nameFile)
+            //const dT = new ClipboardEvent('').clipboardData || new DataTransfer();
+            //dT.items.add(file);
+            //inputForm.files = dT.files;
+
+            // $('ImgChangning').src = ('\wwwroot\imgs\Staffs\' + obj.staffName + '.png';
+            //$('#LoadChangeImg').removeAttr('hidden');
+
+            $('#CStaffName').val(obj.staffName);
+            $('#CDateDeliver').val((obj.dateDeliver).substring(0, obj.dateDeliver.length - (obj.dateDeliver.length - 10)));
+            $('#CWeight').val(obj.weight);
+            $('#CPrice').val(obj.price);
+            $('#CCalories').val(obj.calories);
+            $('#CClassification').val(obj.classification);
+            $('#CSelectCompanyId').val(obj.companyId);
+        });
+    </script>
+}

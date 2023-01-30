@@ -85,13 +85,41 @@ namespace Confectionery.Mapers
             return result;
             
         }
-        public SweetStaff MapToSweetStaffs(SweetStaffViewModel x)
+        public SweetStaff MapToSweetStaff(SweetStaffViewModel x)
         {
             return new SweetStaff(x.StaffId, x.StaffName, x.DateDeliver, x.Weight, x.Price, x.Calories, x.Classification, x.CompanyId);
         }
         public AccountViewModel MapToUserAccountView(User x)
         {
             return new AccountViewModel(x.EmailUser, x.NameUser, x.TotalSpent);
+        }
+        public List<OrderViewModel> MapToOrdersView(List<Order> p7)
+        {
+            if (p7 == null)
+            {
+                return null;
+            }
+            List<OrderViewModel> result = new List<OrderViewModel>(p7.Count);
+            
+            int i = 0;
+            int len = p7.Count;
+            
+            while (i < len)
+            {
+                Order item = p7[i];
+                result.Add(new OrderViewModel(item.OrderId, item.UserId, item.DateOrder, item.Total, (short)item.StatusOrder));
+                i++;
+            }
+            return result;
+            
+        }
+        public OrderViewModel MapToOrderView(Order x)
+        {
+            return new OrderViewModel(x.OrderId, x.UserId, x.DateOrder, x.Total, (short)x.StatusOrder);
+        }
+        public Order MapToOrder(OrderViewModel x)
+        {
+            return new Order((int)x.OrderId, x.UserId, x.DateOrder, (float)x.Total, (short)x.StatusOrder);
         }
         
         private SStaffViewModel funcMain1(SweetStaff p2)

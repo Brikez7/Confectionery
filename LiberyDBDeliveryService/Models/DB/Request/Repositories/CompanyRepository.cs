@@ -48,5 +48,10 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
             await conn.QueryAsync<Company>($"DELETE FROM {table_name} WHERE {company_id} = @{company_id};", new { company_id = id});
             return;
         }
+        public async Task<IEnumerable<int>> GetAllId()
+        {
+            await using var conn = await ConnectiomProvider.GetConnectionAsync();
+            return await conn.QueryAsync<int>($"SELECT {company_id} FROM {table_name}");            
+        }
     }
 }

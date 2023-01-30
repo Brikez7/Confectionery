@@ -3,7 +3,6 @@ using LibraryDatabaseCoffe.Models.DB.Context.@interface;
 using LibraryDatabaseCoffe.Models.DB.Repository;
 using LibraryDatabaseCoffe.Models.DB.Request.AbstractRepositorys;
 using LibraryDatabaseCoffe.Models.DB.Tables;
-using System.Text;
 
 namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
 {
@@ -61,7 +60,12 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
             await conn.QueryAsync<DescriptionOrder>($"UPDATE {table_name} SET {order_id} = @{order_id}, {staff_id} = @{staff_id}, {amount} = @{amount} WHERE {description_id} = @{description_id};", new { order_id = record.Orderid, staff_id = record.StaffId, amount = record.AmountSweetStaff, description_id = id, });
             return;
         }
-
+        public async Task<bool> Search(int id)
+        {
+            await using var conn = await ConnectiomProvider.GetConnectionAsync();
+            var exist = await conn.QuerySingleAsync<bool>($"SELECT exists(SELECT * FROM {table_name} WHERE {description_id} = @{description_id});", new { description_id = id, });
+            return exist;
+        }
         public async Task DeleteAsync(int id)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();

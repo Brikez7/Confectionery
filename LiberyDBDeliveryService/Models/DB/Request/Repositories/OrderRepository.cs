@@ -3,7 +3,6 @@ using LibraryDatabaseCoffe.Models.DB.Context.@interface;
 using LibraryDatabaseCoffe.Models.DB.Repository;
 using LibraryDatabaseCoffe.Models.DB.Request.AbstractRepositorys;
 using LibraryDatabaseCoffe.Models.DB.Tables;
-using System.Text;
 
 namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
 {
@@ -42,7 +41,7 @@ namespace LibraryDatabaseCoffe.Models.DB.Request.Repositories
         public async Task UpdateAsync(int id, Order record)
         {
             await using var conn = await ConnectiomProvider.GetConnectionAsync();
-            await conn.QueryAsync<Order>($"UPDATE FROM {table_name} SET {user_id} = @{user_id}, {order_date} = @{order_date}, {total} = @{total} WHERE {order_id} = @{order_id};", new { user_id = record.UserId, status_order = (short)record.StatusOrder,  order_id = id});
+            await conn.QueryAsync<Order>($"UPDATE {table_name} SET {order_date} = @{order_date}, {status_order} = @{status_order} WHERE {order_id} = @{order_id};", new {  order_date = record.DateOrder, status_order = (short)record.StatusOrder,  order_id = id});
             return;
         }
 

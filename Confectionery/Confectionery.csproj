@@ -12,8 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MiddleWares\" />
-    <Folder Include="wwwroot\imgs\" />
+    <Folder Include="wwwroot\imgs\Staffs\" />
   </ItemGroup>
 
   <ItemGroup>

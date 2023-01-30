@@ -60,6 +60,14 @@ namespace Confectionery.Mappers
             config.NewConfig<User, AccountViewModel>()
                   .MapWith(x => new AccountViewModel(x.EmailUser,x.NameUser,x.TotalSpent))
                   .RequireDestinationMemberSource(true);
+
+            config.NewConfig<Order, OrderViewModel>()
+                  .MapWith(x => new OrderViewModel(x.OrderId,x.UserId,x.DateOrder,x.Total,(short)x.StatusOrder))
+                  .RequireDestinationMemberSource(true);
+
+            config.NewConfig<OrderViewModel, Order>()
+                  .MapWith(x => new Order((int)x.OrderId, x.UserId, x.DateOrder, x.Total, (short)x.StatusOrder))
+                  .RequireDestinationMemberSource(true);
         }   
     }
 }

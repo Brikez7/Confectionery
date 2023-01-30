@@ -22,6 +22,15 @@
                 <div class="col-2 mt-3">
                     <h5 class="mb-1 mt-3">Status: Admin</h5>
                 </div>
+                <div class="col-2 mt-3">
+                    <a class="h5 mb-1 mt-3 text-decoration-none text-decoration-underline text-black" type="submit" asp-action="PanelCompany" asp-controller="Admin">Компании</a>
+                </div>
+                <div class="col-2 mt-3">
+                    <a class="h5 mb-1 mt-3 text-decoration-none text-black" type="submit" asp-action="PanelSweetStaff" asp-controller="Admin">Десерты</a>
+                </div>
+                <div class="col-2 mt-3">
+                    <a class="h5 mb-1 mt-3 text-decoration-none text-black" type="submit" asp-action="PanelOrder" asp-controller="Admin">Заказы</a>
+                </div>
             </div>
         </div>
     </div>
@@ -47,7 +56,7 @@
             <span asp-validation-for="NewCompany.BankingAccount" class="text-danger"></span>
         </div>
         <div class="col-2 d-flex align-items-end">
-            <button id="AddCompany" type="submit" asp-controller="Admin" asp-action="AddCompany" class="btn container btn-success">Add Compnay</button>
+            <button id="AddCompany" type="submit" asp-controller="Admin" asp-action="AddCompany" class="btn container btn-success">Добавить</button>
         </div>
         <div class="col-2 border-1 border-secondary"></div>
     </form>
@@ -82,7 +91,7 @@
             <span asp-validation-for="NewCompany.BankingAccount" class="text-danger"></span>
         </div>
         <div class="col-2 m-0 p-0  d-flex align-items-end">
-            <button type="submit" asp-action="ChangeCompany" asp-controller="Admin" class="btn btn-primary">Change company</button>
+            <button type="submit" asp-action="ChangeCompany" asp-controller="Admin" class="btn btn-primary">Изменить</button>
         </div>
     </form>
     <table id="TableCompany" class="table mt-5">
@@ -104,7 +113,7 @@
                 <td>@compnay.CompanyName</td>
                 <td>@compnay.BankingAccount</td>
                 <td>@compnay.Owner</td>
-                <td><a type="submit" class="btn btn-outline-danger col-10" asp-route-IdDeleteCompany="@compnay.CompanyId" asp-controller="Admin" asp-action="DeleteCompany">Delete</a></td>
+                <td><a type="submit" class="btn btn-outline-danger col-10" asp-route-IdDeleteCompany="@compnay.CompanyId" asp-controller="Admin" asp-action="DeleteCompany">Удалить</a></td>
             </tr>        
         }
         </tbody>
@@ -154,7 +163,7 @@
         var _form = _this.closest("form");
 
         _form.validate();
-        var isvalid = _form .valid();
+        var isvalid = _form.valid();
         if(isvalid){
             const data = $('#FInfoAddCompany').serialize()
 
@@ -184,7 +193,8 @@
 
     function search(Key, myArray){
         for(var obj in myArray){
-            if(obj == Key){
+            console.log(myArray[obj]);
+            if(myArray[obj].companyId == Key){
                 console.log(myArray[obj]);
                 return myArray[obj];
             }
