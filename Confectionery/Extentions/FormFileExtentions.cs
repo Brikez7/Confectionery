@@ -83,11 +83,11 @@ public static class FormFileExtensions
         }
         return true;
     }
-    public static void SaveAsImage(this IFormFile image,string FileName) 
+    public async static void SaveAsImage(this IFormFile image,string FileName) 
     {
         using (FileStream file = new FileStream(FileName + ".png", FileMode.Create)) 
         {
-            image.CopyToAsync(file);
+            await image.CopyToAsync(file);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Confectionery
 
             ConnectionOptions connectionOptions = new ConnectionOptions();
             services.Configure<ConnectionOptions>(
-                Configuration.GetSection(ConnectionOptions.NameConnection)
+                    Configuration.GetSection(ConnectionOptions.NameConnection)
                 );
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
